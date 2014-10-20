@@ -1,0 +1,7 @@
+
+
+<!ELEMENT deportistas (deportista+)>
+<!ATTLIST deportistas id ID #REQUIRED>
+<!ELEMENT deportista (deporte, nombre)>
+<!ELEMENT deporte (#PCDATA)>
+<!ELEMENT nombre (#PCDATA)>

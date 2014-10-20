@@ -47,7 +47,7 @@ public class Directorios extends javax.swing.JFrame {
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
-    jButton1 = new javax.swing.JButton();
+    jButtonDirectorios = new javax.swing.JButton();
     labelActualDir = new javax.swing.JLabel();
     jComboBoxDirectorios = new javax.swing.JComboBox();
     jScrollPane1 = new javax.swing.JScrollPane();
@@ -55,19 +55,14 @@ public class Directorios extends javax.swing.JFrame {
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-    jButton1.setText("Sacar Directorios");
-    jButton1.addActionListener(new java.awt.event.ActionListener() {
+    jButtonDirectorios.setText("Sacar Directorios");
+    jButtonDirectorios.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jButton1ActionPerformed(evt);
+        jButtonDirectoriosActionPerformed(evt);
       }
     });
 
     jComboBoxDirectorios.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "./" }));
-    jComboBoxDirectorios.addItemListener(new java.awt.event.ItemListener() {
-      public void itemStateChanged(java.awt.event.ItemEvent evt) {
-        jComboBoxDirectoriosItemStateChanged(evt);
-      }
-    });
 
     subdirectorios.setColumns(20);
     subdirectorios.setRows(5);
@@ -80,17 +75,18 @@ public class Directorios extends javax.swing.JFrame {
       .addGroup(layout.createSequentialGroup()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(layout.createSequentialGroup()
-            .addGap(27, 27, 27)
-            .addComponent(jComboBoxDirectorios, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-          .addGroup(layout.createSequentialGroup()
             .addGap(102, 102, 102)
-            .addComponent(jButton1))
+            .addComponent(jButtonDirectorios))
           .addGroup(layout.createSequentialGroup()
             .addGap(64, 64, 64)
             .addComponent(labelActualDir)))
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addContainerGap(327, Short.MAX_VALUE))
+      .addGroup(layout.createSequentialGroup()
+        .addGap(27, 27, 27)
+        .addComponent(jComboBoxDirectorios, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGap(76, 76, 76))
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,14 +100,14 @@ public class Directorios extends javax.swing.JFrame {
             .addComponent(jComboBoxDirectorios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(0, 0, Short.MAX_VALUE)))
         .addGap(18, 18, 18)
-        .addComponent(jButton1)
+        .addComponent(jButtonDirectorios)
         .addGap(26, 26, 26))
     );
 
     pack();
   }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonDirectoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDirectoriosActionPerformed
         // TODO add your handling code here:
         Navegador n = new Navegador();
 
@@ -137,12 +133,7 @@ public class Directorios extends javax.swing.JFrame {
 
         }
 
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jComboBoxDirectoriosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxDirectoriosItemStateChanged
-        // TODO add your handling code here:
-        //JOptionPane.showMessageDialog(this,jComboBox1.getSelectedItem());
-    }//GEN-LAST:event_jComboBoxDirectoriosItemStateChanged
+    }//GEN-LAST:event_jButtonDirectoriosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -180,7 +171,7 @@ public class Directorios extends javax.swing.JFrame {
         });
     }
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JButton jButton1;
+  private javax.swing.JButton jButtonDirectorios;
   private javax.swing.JComboBox jComboBoxDirectorios;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JLabel labelActualDir;

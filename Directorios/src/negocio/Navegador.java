@@ -6,7 +6,7 @@ package negocio;
 
 import java.io.File;
 import java.util.ArrayList;
-import javaapplication1.bd.Archivo;
+import bd.Archivo;
 
 /**
  *

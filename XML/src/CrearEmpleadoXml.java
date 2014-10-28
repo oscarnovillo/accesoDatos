@@ -36,9 +36,9 @@ public class CrearEmpleadoXml {
 	 if(id>0) { //id validos a partir de 1
 	   Element raiz = document.createElement("empleado"); //nodo empleado
          document.getDocumentElement().appendChild(raiz);                        
-         CrearElemento("id",Integer.toString(id), raiz, document); //añadir ID
+         CrearElemento("id",Integer.toString(id), raiz, document); //aÃ±adir ID
          CrearElemento("apellido",apellidoS.trim(), raiz, document); //Apellido 
-         CrearElemento("dep",Integer.toString(dep), raiz, document); //añadir DEP
+         CrearElemento("dep",Integer.toString(dep), raiz, document); //aÃ±adir DEP
          CrearElemento("salario",Double.toString(salario), raiz, document); //SAL 
 	   }	
 	   posicion= posicion + 36; // me posiciono para el sig empleado	  	  
@@ -58,7 +58,7 @@ public class CrearEmpleadoXml {
 	file.close();  //cerrar fichero 	
  }//de main
  
- //Inserción de los datos del empleado
+ //Inserciï¿½n de los datos del empleado
  static void  CrearElemento(String datoEmple, String valor,
                             Element raiz, Document document){
          Element elem = document.createElement(datoEmple); //creamos hijo

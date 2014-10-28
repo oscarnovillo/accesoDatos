@@ -14,7 +14,7 @@ public class convertidor {
   
   Source estilos =new StreamSource(hojaEstilo); //fuente XSL
   Source datos =new StreamSource(datosAlumnos); //fuente XML
-  Result result = new StreamResult(os);         //resultado de la transformación
+  Result result = new StreamResult(os);         //resultado de la transformacion
   
   try{     
    Transformer transformer =  

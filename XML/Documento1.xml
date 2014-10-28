@@ -1,12 +1,22 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-
-<deportistas id="hol" >
-  <deportista>
-    <deporte>Atletismo</deporte>
-    <nombre>Jesse Owens</nombre>
-    </deportista>
-  <deportista>
-    <deporte >Natación</deporte>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE deportistas [
+<!ELEMENT deportistas (deportista+)>
+<!ATTLIST deportista id ID #REQUIRED>
+<!ELEMENT deportista (deporte, nombre)>
+<!ELEMENT deporte (#PCDATA)>
+<!ELEMENT nombre (#PCDATA)>
+]>
+<deportistas><deportista id="1" ><deporte>Atletismo</deporte><nombre>Jesse Owens</nombre></deportista><deportista id="2"><deporte >Natación</deporte>
     <nombre>Mark Spitz</nombre>
   </deportista>
+  <porqueria>
+      <mierda>
+          <deportista>
+    <deporte >Caca</deporte>
+    <nombre>Benito floro</nombre>
+          </deportista>
+          
+      </mierda>
+      
+  </porqueria>
 </deportistas>

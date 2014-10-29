@@ -36,9 +36,10 @@ public class JdomReadXMLExample {
   try {  
    // converted file to document object  
    Document document = saxBuilder.build(file);  
-     
+   Object o = document.getProperty("1");
    // get root node from xml  
    Element rootNode = document.getRootElement();  
+   
    
    // got all xml elements into a list  
       List<Element> studentList = rootNode.getChildren("student");  

@@ -1,0 +1,14 @@
+<ListaPersonasMunicipio>
+  <DatosPersona coche="ford,focus,120">
+    <nombre>pedro</nombre>
+    <edad>10</edad>
+  </DatosPersona>
+  <DatosPersona coche="citroen,C4,125">
+    <nombre>sedro</nombre>
+    <edad>15</edad>
+  </DatosPersona>
+  <DatosPersona coche="renault,megane,110">
+    <nombre>fedro</nombre>
+    <edad>30</edad>
+  </DatosPersona>
+</ListaPersonasMunicipio>

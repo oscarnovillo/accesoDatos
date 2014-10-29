@@ -14,6 +14,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;  
 import org.jdom2.JDOMException;  
 import org.jdom2.input.SAXBuilder;  
+
 /**
  *
  * @author oscar
@@ -45,7 +46,8 @@ public class JdomReadXMLExample {
       // simple iteration to see the result on console  
       for(int i=0;i<=studentList.size()-1;i++){  
        Element element = studentList.get(i);  
-        System.out.println("id "+element.getAttributeValue("id"));
+       
+       System.out.println("id "+element.getAttributeValue("id"));
        System.out.println("First Name : "+element.getChildText("firstname"));  
        System.out.println("Last Name : "+element.getChildText("lastname"));  
        System.out.println("Email : "+element.getChildText("email"));  

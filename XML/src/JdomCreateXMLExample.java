@@ -33,7 +33,13 @@ public class JdomCreateXMLExample {
 
       // adding child attribute to student element  
       student.setAttribute(new Attribute("id", "1"));
-      student.addContent(new Element("firstname").setText("ankush"));
+      Element first = new Element("firstname");
+      first.addContent(new Element("dentro").setText("thakur"));
+     
+       student.addContent(first);
+      
+      student.getChild("firstname").addContent(new Element("dentro2").setText("thakur"));
+     
       student.addContent(new Element("lastname").setText("thakur"));
       student.addContent(new Element("email")
               .setText("beingjavaguy@gmail.com"));
@@ -44,7 +50,6 @@ public class JdomCreateXMLExample {
 
       // get object to see output of prepared document  
       XMLOutputter xmlOutput = new XMLOutputter();
-
       // passsed System.out to see document content on console  
       xmlOutput.output(document, System.out);
 

@@ -6,13 +6,19 @@
 <!ELEMENT deporte (#PCDATA)>
 <!ELEMENT nombre (#PCDATA)>
 ]>
-<deportistas><deportista id="1" ><deporte>Atletismo</deporte><nombre>Jesse Owens</nombre></deportista><deportista id="2"><deporte >Natación</deporte>
-    <nombre>Mark Spitz</nombre>
-  </deportista>
+<deportistas>
+    <deportista id="1" >
+        <deporte>Atletismo</deporte>
+        <nombre>Jesse Owens</nombre>
+    </deportista>
+    <deportista id="2">
+        <deporte >Natación</deporte>
+        <nombre>Mark Spitz</nombre>
+    </deportista>
 
-          <deportista id="3">
-    <deporte >Caca</deporte>
-    <nombre>Benito floro</nombre>
-          </deportista>
+    <deportista id="3">
+        <deporte >Caca</deporte>
+        <nombre>Benito floro</nombre>
+    </deportista>
           
 </deportistas>

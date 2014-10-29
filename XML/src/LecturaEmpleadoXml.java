@@ -1,6 +1,12 @@
 
 import java.io.File;
 import javax.xml.parsers.*;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.*;
 
 public class LecturaEmpleadoXml {
@@ -12,8 +18,6 @@ public class LecturaEmpleadoXml {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document = builder.parse(new File("Documento1.xml"));
             document.getDocumentElement().normalize();
-
-
 
             System.out.println("Elemento raíz: " + document.getDocumentElement().getNodeName());
 
@@ -63,8 +67,8 @@ public class LecturaEmpleadoXml {
 
             Element raiz = document.getDocumentElement();
             navegarXML(raiz);
-
-
+            
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,12 +85,7 @@ public class LecturaEmpleadoXml {
                 {
                     navegarXML(n);
                 }
-                
-                
             }
-
-
-
         }
 
 

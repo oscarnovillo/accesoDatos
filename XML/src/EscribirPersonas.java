@@ -29,11 +29,11 @@ public class EscribirPersonas {
 
         //Creamos un objeto Lista de Personas
         ListaPersonas listaper = new ListaPersonas();
-        Persona persona = (Persona) new Persona("pedro", 10,new Coche("ford","focus",120)); //leer una Persona     
+        Persona persona = (Persona) new Persona(1,"pedro", 10,new Coche("ford","focus",120)); //leer una Persona     
         listaper.add(persona);
-        persona = (Persona) new Persona("sedro", 15,new Coche("citroen","C4",125)); //leer una Persona     
+        persona = (Persona) new Persona(2,"sedro", 15,new Coche("citroen","C4",125)); //leer una Persona     
         listaper.add(persona);
-        persona = (Persona) new Persona("fedro", 30,new Coche("renault","megane",110)); //leer una Persona     
+        persona = (Persona) new Persona(3,"fedro", 30,new Coche("renault","megane",110)); //leer una Persona     
  listaper.add(persona);
  
         try {

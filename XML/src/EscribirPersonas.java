@@ -41,12 +41,14 @@ public class EscribirPersonas {
             //cambiar de nombre a las etiquetas XML
             xstream.alias("ListaPersonasMunicipio", ListaPersonas.class);
             xstream.alias("DatosPersona", Persona.class);
+            
+            
             xstream.useAttributeFor(Persona.class, "coche");
+            //xstream.useAttributeFor(Persona.class, "id");
             //quitar etiwueta lista (atributo de la clase ListaPersonas)
             xstream.addImplicitCollection(ListaPersonas.class, "lista");
             //Insrtar los objetos en el XML
             xstream.registerConverter(new CocheConverter());
-
             xstream.toXML(listaper, new FileOutputStream("Personas.xml"));
             System.out.println("Creado fichero XML....");
         } catch (Exception e) {

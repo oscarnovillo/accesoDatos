@@ -1,13 +1,16 @@
 <ListaPersonasMunicipio>
   <DatosPersona coche="ford,focus,120">
+    <id>1</id>
     <nombre>pedro</nombre>
     <edad>10</edad>
   </DatosPersona>
   <DatosPersona coche="citroen,C4,125">
+    <id>2</id>
     <nombre>sedro</nombre>
     <edad>15</edad>
   </DatosPersona>
   <DatosPersona coche="renault,megane,110">
+    <id>3</id>
     <nombre>fedro</nombre>
     <edad>30</edad>
   </DatosPersona>

@@ -44,7 +44,7 @@ class GestionContenido extends DefaultHandler {
 		
 		public void characters(char[] ch, int start, int length) throws SAXException {
 		   String car=new String(ch, start, length);
-		   car = car.replaceAll("[\t\n]","");//quitar saltos de línea		   
+		   car = car.replaceAll("[\t\n]","");//quitar saltos de linea		   
 		   System.out.println ("\tCaracteres: " + car);		
 	    }
 }//fin GestionContenido

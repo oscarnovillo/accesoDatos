@@ -1,26 +1,41 @@
 <linked-hash-map>
   <entry>
     <string>1</string>
-    <DatosPersona coche="ford,focus,120">
+    <Persona>
       <id>1</id>
       <nombre>pedro</nombre>
       <edad>10</edad>
-    </DatosPersona>
+      <coche>
+        <marca>ford</marca>
+        <modelo>focus</modelo>
+        <velocidadMaxima>120</velocidadMaxima>
+      </coche>
+    </Persona>
   </entry>
   <entry>
     <string>2</string>
-    <DatosPersona coche="citroen,C4,125">
+    <Persona>
       <id>2</id>
       <nombre>sedro</nombre>
       <edad>15</edad>
-    </DatosPersona>
+      <coche>
+        <marca>citroen</marca>
+        <modelo>C4</modelo>
+        <velocidadMaxima>125</velocidadMaxima>
+      </coche>
+    </Persona>
   </entry>
   <entry>
     <string>3</string>
-    <DatosPersona coche="renault,megane,110">
+    <Persona>
       <id>3</id>
       <nombre>fedro</nombre>
       <edad>30</edad>
-    </DatosPersona>
+      <coche>
+        <marca>renault</marca>
+        <modelo>megane</modelo>
+        <velocidadMaxima>110</velocidadMaxima>
+      </coche>
+    </Persona>
   </entry>
 </linked-hash-map>

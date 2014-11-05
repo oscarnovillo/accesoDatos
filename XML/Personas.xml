@@ -5,11 +5,6 @@
       <id>1</id>
       <nombre>pedro</nombre>
       <edad>10</edad>
-      <coche>
-        <marca>ford</marca>
-        <modelo>focus</modelo>
-        <velocidadMaxima>120</velocidadMaxima>
-      </coche>
     </Persona>
   </entry>
   <entry>
@@ -18,11 +13,6 @@
       <id>2</id>
       <nombre>sedro</nombre>
       <edad>15</edad>
-      <coche>
-        <marca>citroen</marca>
-        <modelo>C4</modelo>
-        <velocidadMaxima>125</velocidadMaxima>
-      </coche>
     </Persona>
   </entry>
   <entry>
@@ -31,11 +21,6 @@
       <id>3</id>
       <nombre>fedro</nombre>
       <edad>30</edad>
-      <coche>
-        <marca>renault</marca>
-        <modelo>megane</modelo>
-        <velocidadMaxima>110</velocidadMaxima>
-      </coche>
     </Persona>
   </entry>
 </linked-hash-map>

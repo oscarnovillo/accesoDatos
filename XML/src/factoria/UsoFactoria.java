@@ -2,7 +2,6 @@ package factoria;
 
 
 import factoria.TiposToXML;
-import factoria.ToXML;
 import factoria.ToXMLFactory;
 import factoria.ToXMLable;
 

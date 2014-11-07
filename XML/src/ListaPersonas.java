@@ -1,3 +1,4 @@
+import datos.Persona;
 import java.util.ArrayList;
 import java.util.List;
 public class ListaPersonas {

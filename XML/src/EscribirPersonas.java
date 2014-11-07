@@ -1,4 +1,6 @@
 
+import datos.Coche;
+import datos.Persona;
 import java.io.*;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.SingleValueConverter;

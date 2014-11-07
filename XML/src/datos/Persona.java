@@ -1,12 +1,19 @@
+package datos;
+
 
 import java.io.Serializable;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class Persona implements Serializable {
 
     private int id;
     private String nombre;
     private int edad;
     private transient Coche coche;
+
+  public Persona() {
+  }
 
     public Persona(int id,String nombre, int edad, Coche coche) {
         this.id = id;
@@ -23,9 +30,7 @@ public class Persona implements Serializable {
         this.id = id;
     }
 
-    public Persona() {
-        this.nombre = null;
-    }
+
 
     public Coche getCoche() {
         return coche;

@@ -1,26 +1,26 @@
 <linked-hash-map>
   <entry>
     <string>1</string>
-    <Persona>
+    <datos.Persona>
       <id>1</id>
       <nombre>pedro</nombre>
       <edad>10</edad>
-    </Persona>
+    </datos.Persona>
   </entry>
   <entry>
     <string>2</string>
-    <Persona>
+    <datos.Persona>
       <id>2</id>
       <nombre>sedro</nombre>
       <edad>15</edad>
-    </Persona>
+    </datos.Persona>
   </entry>
   <entry>
     <string>3</string>
-    <Persona>
+    <datos.Persona>
       <id>3</id>
       <nombre>fedro</nombre>
       <edad>30</edad>
-    </Persona>
+    </datos.Persona>
   </entry>
 </linked-hash-map>

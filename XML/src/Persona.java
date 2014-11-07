@@ -6,7 +6,7 @@ public class Persona implements Serializable {
     private int id;
     private String nombre;
     private int edad;
-    private Coche coche;
+    private transient Coche coche;
 
     public Persona(int id,String nombre, int edad, Coche coche) {
         this.id = id;

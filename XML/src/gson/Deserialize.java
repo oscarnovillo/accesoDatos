@@ -32,7 +32,10 @@ public class Deserialize {
 
       fr.close();
       fr = new FileReader("gsonJSONlista.json"); 
-      Persona[] a = gson.fromJson(fr,Persona[].class);
+            Type typeOfList = new TypeToken<ArrayList<Persona>>() {
+                    }.getType();
+            ArrayList<Persona> array = gson.fromJson(fr,typeOfList);
+      //Persona[] a = gson.fromJson(fr,Persona[].class);
       fr.close();
       fr = new FileReader("gsonJSONObject.json"); 
       Persona p = gson.fromJson(fr,Persona.class);

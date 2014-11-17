@@ -10,7 +10,7 @@ public class Persona implements Serializable {
     private int id;
     private String nombre;
     private int edad;
-    private transient Coche coche;
+    private Coche coche;
 
   public Persona() {
   }

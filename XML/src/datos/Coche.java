@@ -15,6 +15,11 @@ public class Coche {
     private String modelo;
     private int velocidadMaxima;
 
+    public Coche()
+    {
+      
+    }
+    
     public Coche(String marca, String modelo, int velocidadMaxima) {
         this.marca = marca;
         this.modelo = modelo;

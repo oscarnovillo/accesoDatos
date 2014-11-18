@@ -24,29 +24,15 @@ public class Deserialize {
   public static void main(String[] args)
    {
       Persona employee = null;
-      Object foo = null;
+      LinkedHashMap<Integer,Persona> foo = null;
       ObjectMapper mapper = new ObjectMapper();
       try
       {
          employee =  mapper.readValue(new File("jackson.json"), Persona.class);
          
-foo = mapper.readValue(new File("jacksonHashMap.json"),  new TypeReference<LinkedHashMap<Integer,Persona>>() { });  
-System.out.println(foo);  
-// output: {a=A, b={c=C, d=[D, E, F]}}  
-System.out.println(mapper.writeValueAsString(foo));  
-// output: {"a":"A","b":{"c":"C","d":["D","E","F"]}}  
-System.out.println(foo.getClass());  
-// output: class java.util.LinkedHashMap  
-  
-// What specifically is in the fooMap?  
-Map<String, Object> fooMap = (Map) foo;  
-for (Entry entry : fooMap.entrySet())  
-{  
-  System.out.printf("key: %s, value: %s (%s)\n",   
-      entry.getKey(), entry.getValue(),   
-      entry.getValue().getClass());  
-}           
-         
+foo = mapper.readValue(new File("jacksonHashMap.json"),  
+        new TypeReference<LinkedHashMap<Integer,Persona>>() { });  
+       
       } catch (JsonGenerationException e)
       {
          e.printStackTrace();

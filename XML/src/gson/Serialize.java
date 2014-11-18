@@ -51,7 +51,7 @@ Gson gson = new Gson();
  
 Gson gson1 = new GsonBuilder()
              .disableHtmlEscaping()
-             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+             .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
              .setPrettyPrinting()
              .serializeNulls()
              .create();
@@ -60,6 +60,7 @@ Gson gson1 = new GsonBuilder()
 gson.toJson(hash,fw);
 fw.close();
 fw = new FileWriter("gsonJSONlista.json");
+
 gson.toJson(a,fw);
 fw.close();
 fw = new FileWriter("gsonJSONObject.json");

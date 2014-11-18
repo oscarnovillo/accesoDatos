@@ -49,9 +49,12 @@ public class JdomReadXMLExample {
   
         // select all links
         XPathExpression<Element> expr = xFactory.compile("//school/student[@id='s2']", Filters.element());
+        
         List<Element> links = expr.evaluate(document);
         for (Element linkElement : links) {
            System.out.println("id "+linkElement.getAttributeValue("id"));
+          
+           
        System.out.println("First Name : "+linkElement.getChildText("firstname"));  
        System.out.println("Last Name : "+linkElement.getChildText("lastname"));  
        System.out.println("Email : "+linkElement.getChildText("email"));  

@@ -40,24 +40,24 @@ public class FramePersonas extends javax.swing.JFrame {
         model.addColumn("ID");
         model.addColumn("NOMBRE");
         model.addRow(new Object[]{"1", "Oscar"});
-        jTable1.setModel(model);
-        jTable1.getModel().addTableModelListener(new TableModelListener() {
+        jTablePersonas.setModel(model);
+        jTablePersonas.getModel().addTableModelListener(new TableModelListener() {
 
             @Override
             public void tableChanged(TableModelEvent tme) {
-                JOptionPane.showMessageDialog(jTable1,jTable1.getValueAt(tme.getColumn()
+                JOptionPane.showMessageDialog(jTablePersonas,jTablePersonas.getValueAt(tme.getColumn()
                         ,tme.getFirstRow()) );
             }
         });
-        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        jTablePersonas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent lse) {
                 jTextField1.setText(
-                        jTable1.getValueAt(
-                        jTable1.getSelectedRow(), Constantes.COLUMN_ID).toString());
+                        jTablePersonas.getValueAt(
+                        jTablePersonas.getSelectedRow(), Constantes.COLUMN_ID).toString());
                 jTextField2.setText(
-                        jTable1.getValueAt(
-                        jTable1.getSelectedRow(), Constantes.COLUMN_NOMBRE).toString());
+                        jTablePersonas.getValueAt(
+                        jTablePersonas.getSelectedRow(), Constantes.COLUMN_NOMBRE).toString());
             }
         });
 
@@ -99,7 +99,7 @@ public class FramePersonas extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTablePersonas = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -166,7 +166,7 @@ public class FramePersonas extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTablePersonas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -177,7 +177,7 @@ public class FramePersonas extends javax.swing.JFrame {
 
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTablePersonas);
 
         jTextField1.setText("jTextField1");
 
@@ -275,10 +275,10 @@ public class FramePersonas extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        int filaSeleccionada = jTable1.getSelectedRow();
+        int filaSeleccionada = jTablePersonas.getSelectedRow();
         if (filaSeleccionada > 0) {
-            jTextField1.setText(jTable1.getModel().getValueAt(filaSeleccionada, 0).toString());
-            jTextField1.setText(jTable1.getModel().getValueAt(filaSeleccionada, 1).toString());
+            jTextField1.setText(jTablePersonas.getModel().getValueAt(filaSeleccionada, 0).toString());
+            jTextField1.setText(jTablePersonas.getModel().getValueAt(filaSeleccionada, 1).toString());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -287,11 +287,11 @@ public class FramePersonas extends javax.swing.JFrame {
         Persona p = null;
 
 
-        for (int i = 0; i < jTable1.getRowCount(); i++) {
+        for (int i = 0; i < jTablePersonas.getRowCount(); i++) {
 
             p = new Persona(
-                    Integer.parseInt(jTable1.getModel().getValueAt(i, Constantes.COLUMN_ID).toString()),
-                    (String) jTable1.getModel().getValueAt(i, Constantes.COLUMN_NOMBRE));
+                    Integer.parseInt(jTablePersonas.getModel().getValueAt(i, Constantes.COLUMN_ID).toString()),
+                    (String) jTablePersonas.getModel().getValueAt(i, Constantes.COLUMN_NOMBRE));
 
             personas.add(p);
         }
@@ -304,7 +304,7 @@ public class FramePersonas extends javax.swing.JFrame {
     }
 
     private void deArrayATabla(ArrayList<Persona> personas) {
-        DefaultTableModel model = ((DefaultTableModel) jTable1.getModel());
+        DefaultTableModel model = ((DefaultTableModel) jTablePersonas.getModel());
 
 
         for (Persona p : personas) {
@@ -389,8 +389,8 @@ public class FramePersonas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTablePersonas;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables

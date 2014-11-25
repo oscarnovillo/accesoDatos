@@ -75,15 +75,6 @@ public class FramePersonas extends javax.swing.JFrame {
             file = new FileReader(Constantes.FICHERO_PROPERTIES);
             p.load(file);
             rutaBD = p.getProperty(Constantes.RUTABD_PROPERTY);
-            //JOptionPane.showMessageDialog(this, rutaBD);
-            
-
-            //curiosidad
-            p.load(this.getClass().getResourceAsStream("/dentro.properties")); 
-            //JOptionPane.showMessageDialog(this,p.getProperty("dentro","defecto"));
-               
-            
-            
             file.close();
         } catch (Exception ex) {
             Logger.getLogger(FramePersonas.class.getName()).log(Level.SEVERE, null, ex);
@@ -116,8 +107,8 @@ public class FramePersonas extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        jButtonCargar = new javax.swing.JButton();
+        jButtonGuardar = new javax.swing.JButton();
 
         jDialog1.setModal(true);
 
@@ -212,17 +203,17 @@ public class FramePersonas extends javax.swing.JFrame {
 
         jButton3.setText("Borrar");
 
-        jButton4.setText("Cargar");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        jButtonCargar.setText("Cargar");
+        jButtonCargar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                jButtonCargarActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Guardar");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        jButtonGuardar.setText("Guardar");
+        jButtonGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                jButtonGuardarActionPerformed(evt);
             }
         });
 
@@ -249,9 +240,9 @@ public class FramePersonas extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton4)
+                        .addComponent(jButtonCargar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5)))
+                        .addComponent(jButtonGuardar)))
                 .addContainerGap(134, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -274,8 +265,8 @@ public class FramePersonas extends javax.swing.JFrame {
                     .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5))
+                    .addComponent(jButtonCargar)
+                    .addComponent(jButtonGuardar))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
@@ -324,7 +315,7 @@ public class FramePersonas extends javax.swing.JFrame {
 
     }
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
         // TODO add your handling code here:
         String nombre = "personas";
         ArrayList<Persona> personas = deTablaAArray();
@@ -333,9 +324,9 @@ public class FramePersonas extends javax.swing.JFrame {
 
 
 
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_jButtonGuardarActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButtonCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargarActionPerformed
         // TODO add your handling code here:
         String nombre = "personas";
         FicherosDatos fd = new FicherosDatos();
@@ -343,7 +334,7 @@ public class FramePersonas extends javax.swing.JFrame {
 
 
 
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_jButtonCargarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
@@ -388,10 +379,10 @@ public class FramePersonas extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButtonCargar;
+    private javax.swing.JButton jButtonGuardar;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

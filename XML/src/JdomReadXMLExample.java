@@ -51,10 +51,11 @@ public class JdomReadXMLExample {
         XPathExpression<Element> expr = xFactory.compile("//school/student[@id='s2']", Filters.element());
         
         List<Element> links = expr.evaluate(document);
+        
         for (Element linkElement : links) {
            System.out.println("id "+linkElement.getAttributeValue("id"));
           
-           
+          
        System.out.println("First Name : "+linkElement.getChildText("firstname"));  
        System.out.println("Last Name : "+linkElement.getChildText("lastname"));  
        System.out.println("Email : "+linkElement.getChildText("email"));  
@@ -62,8 +63,11 @@ public class JdomReadXMLExample {
             linkElement.getChild("firstname").setText("PROBANDO");
         }
   
+        
    // get root node from xml  
    Element rootNode = document.getRootElement();  
+   
+
    
    
    // got all xml elements into a list  

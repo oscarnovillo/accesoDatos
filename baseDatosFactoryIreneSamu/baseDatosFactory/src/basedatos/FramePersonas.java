@@ -38,7 +38,7 @@ public class FramePersonas extends javax.swing.JFrame {
   Comprobacion c = new Comprobacion();
   Saveable save = null;
   private String rutaBD = null;
-  HashMap<Integer, Persona> personas =null;
+  HashMap<Integer, Persona> personas = new HashMap<>();
 
   public DefaultTableModel crearModeloPersonas() {
     DefaultTableModel model = new DefaultTableModel();

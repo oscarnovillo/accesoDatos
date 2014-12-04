@@ -1,9 +1,9 @@
 <map>
   <entry>
-    <int>12</int>
+    <int>1</int>
     <datos.Persona>
-      <id>12</id>
-      <nombre>12</nombre>
+      <id>1</id>
+      <nombre>1</nombre>
       <compras/>
     </datos.Persona>
   </entry>

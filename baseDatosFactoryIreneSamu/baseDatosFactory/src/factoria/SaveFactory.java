@@ -16,12 +16,12 @@ public class SaveFactory {
     
     public Saveable build(TiposSave tipo)
     {
-        Saveable interfaz = null;
+        Saveable factoria = null;
         switch(tipo)
         {
-            case XSTREAM : interfaz = new SaveXstream(); break;
-            case JAXB: interfaz = new SaveJaxb(); break; 
+            case XSTREAM : factoria = new SaveXstream(); break;
+            case JAXB: factoria = new SaveJaxb(); break; 
         }
-        return interfaz;
+        return factoria;
     }   
 }

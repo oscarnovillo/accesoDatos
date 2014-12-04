@@ -23,7 +23,7 @@ import javax.xml.bind.Unmarshaller;
  *
  * @author dam2
  */
-public class SaveJaxb implements Saveable {
+public class SaveJaxb extends Saveable {
 
     @Override
     public void comprasToXML(ArrayList<Compra> datos, String file) {
@@ -34,7 +34,7 @@ public class SaveJaxb implements Saveable {
             jc = JAXBContext.newInstance(Compras.class);
             Marshaller m = jc.createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            m.marshal(listaC, new File(file));
+            m.marshal(listaC, new File(this.getFileName(file)));
         } catch (JAXBException ex) {
             
         }
@@ -42,7 +42,7 @@ public class SaveJaxb implements Saveable {
 
     @Override
     public ArrayList<Compra> comprasFromXML(String file) {
-        File f = new File(file);
+        File f = new File(this.getFileName(file));
         Compras c = null;
         JAXBContext jc = null;
         try {
@@ -64,7 +64,8 @@ public class SaveJaxb implements Saveable {
             jc = JAXBContext.newInstance(Personas.class);
             Marshaller m = jc.createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            m.marshal(listaP, new File(file));
+            m.marshal(listaP, new File(this.getFileName(file)));
+            m.marshal(listaP, System.out);
         } catch (JAXBException ex) {
 
         }
@@ -78,9 +79,15 @@ public class SaveJaxb implements Saveable {
         try {
             jc = JAXBContext.newInstance(Personas.class);
             Unmarshaller u = jc.createUnmarshaller();
-            p = (Personas) u.unmarshal(new File(file));
+            p = (Personas) u.unmarshal(new File(this.getFileName(file)));
         } catch (JAXBException ex) {
         }
         return p.getPersonas();
+    }
+
+    @Override
+    protected String getFileName(String file) {
+         file += ConstantesJaxB.FILE_EXTENSION;
+        return file;   
     }
 }

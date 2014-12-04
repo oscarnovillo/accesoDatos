@@ -2,7 +2,7 @@
 
 <Form version="1.3" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Container class="javax.swing.JDialog" name="jDialog1">
+    <Container class="javax.swing.JDialog" name="jDialogCompras">
       <Properties>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[400, 400]"/>
@@ -10,7 +10,7 @@
         <Property name="modal" type="boolean" value="true"/>
       </Properties>
       <Events>
-        <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="jDialog1WindowClosing"/>
+        <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="jDialogComprasWindowClosing"/>
       </Events>
 
       <Layout>
@@ -22,20 +22,20 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="TextCantidad" max="32767" attributes="0"/>
+                          <Component id="jTextCantidad" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="TextConcepto" pref="152" max="32767" attributes="0"/>
+                          <Component id="jTextConcepto" pref="152" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="BotonBorrarC" pref="92" max="32767" attributes="0"/>
+                          <Component id="jButtonBorrarCompras" pref="92" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="BotonCrearC" pref="90" max="32767" attributes="0"/>
+                          <Component id="jButtonCrearCompras" pref="90" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="BotonCancelarC" pref="90" max="32767" attributes="0"/>
+                          <Component id="jButonCancelarCompras" pref="90" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="BotonGuardarC" pref="90" max="32767" attributes="0"/>
+                          <Component id="jbuttonGuardarCompras" pref="90" max="32767" attributes="0"/>
                       </Group>
                       <Component id="jLabel3" alignment="0" max="32767" attributes="0"/>
                   </Group>
@@ -54,18 +54,18 @@
                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel4" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
-                      <Component id="TextCantidad" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jTextCantidad" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel5" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
-                      <Component id="TextConcepto" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jTextConcepto" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="BotonBorrarC" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="BotonCrearC" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="BotonGuardarC" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButtonBorrarCompras" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButtonCrearCompras" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jbuttonGuardarCompras" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="BotonCancelarC" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButonCancelarCompras" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
@@ -80,7 +80,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="jTable2">
+            <Component class="javax.swing.JTable" name="jTableCompras">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="4" rowCount="4">
@@ -94,7 +94,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="BotonCrearC">
+        <Component class="javax.swing.JButton" name="jButtonCrearCompras">
           <Properties>
             <Property name="text" type="java.lang.String" value="Crear"/>
           </Properties>
@@ -102,7 +102,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCrearComprasActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="BotonGuardarC">
+        <Component class="javax.swing.JButton" name="jbuttonGuardarCompras">
           <Properties>
             <Property name="text" type="java.lang.String" value="Guardar"/>
           </Properties>
@@ -115,7 +115,7 @@
             <Property name="text" type="java.lang.String" value="Cliente"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="BotonBorrarC">
+        <Component class="javax.swing.JButton" name="jButtonBorrarCompras">
           <Properties>
             <Property name="text" type="java.lang.String" value="Borrar"/>
           </Properties>
@@ -123,7 +123,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonBorrarComprasActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="BotonCancelarC">
+        <Component class="javax.swing.JButton" name="jButonCancelarCompras">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cancelar"/>
           </Properties>
@@ -131,9 +131,9 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCancelarComprasActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="TextCantidad">
+        <Component class="javax.swing.JTextField" name="jTextCantidad">
         </Component>
-        <Component class="javax.swing.JTextField" name="TextConcepto">
+        <Component class="javax.swing.JTextField" name="jTextConcepto">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
@@ -155,9 +155,6 @@
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
-  <Events>
-    <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
-  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -189,13 +186,13 @@
                   <Group type="102" attributes="0">
                       <Component id="jButtonCrearPersona" pref="81" max="32767" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="jButtonComprar" pref="91" max="32767" attributes="0"/>
+                      <Component id="jButtonComprasDePersona" pref="91" max="32767" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="jButtonBorrar" pref="81" max="32767" attributes="0"/>
+                      <Component id="jButtonBorrarPersona" pref="81" max="32767" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="jButtonGuardar" pref="81" max="32767" attributes="0"/>
+                      <Component id="jButtonGuardarPersona" pref="81" max="32767" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="jButtonCargar" pref="85" max="32767" attributes="0"/>
+                      <Component id="jButtonCargarPersona" pref="85" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -222,10 +219,10 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButtonCrearPersona" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButtonComprar" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButtonBorrar" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButtonGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButtonCargar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButtonComprasDePersona" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButtonBorrarPersona" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButtonGuardarPersona" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButtonCargarPersona" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
@@ -240,7 +237,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="jTable1">
+        <Component class="javax.swing.JTable" name="jTablePersonas">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="0" rowCount="4"/>
@@ -271,7 +268,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCrearPersonaActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonComprar">
+    <Component class="javax.swing.JButton" name="jButtonComprasDePersona">
       <Properties>
         <Property name="label" type="java.lang.String" value="Compras"/>
       </Properties>
@@ -279,39 +276,42 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonComprasActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonBorrar">
+    <Component class="javax.swing.JButton" name="jButtonBorrarPersona">
       <Properties>
         <Property name="text" type="java.lang.String" value="Borrar"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonBorrarActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonBorrarPersonaActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonCargar">
+    <Component class="javax.swing.JButton" name="jButtonCargarPersona">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cargar"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCargarActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCargarPersonaActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonGuardar">
+    <Component class="javax.swing.JButton" name="jButtonGuardarPersona">
       <Properties>
         <Property name="text" type="java.lang.String" value="Guardar"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonGuardarActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonGuardarPersonaActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="jComboBoxTipoFactoria">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="2">
-            <StringItem index="0" value="JaxB"/>
-            <StringItem index="1" value="Xstream"/>
+            <StringItem index="0" value="Xstream"/>
+            <StringItem index="1" value="JaxB"/>
           </StringArray>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBoxTipoFactoriaActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

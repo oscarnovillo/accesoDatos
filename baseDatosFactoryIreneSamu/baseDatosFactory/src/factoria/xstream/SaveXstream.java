@@ -18,13 +18,14 @@ import java.util.HashMap;
  *
  * @author dam2
  */
-public class SaveXstream implements Saveable {
+public class SaveXstream extends Saveable {
 
     @Override
     public void comprasToXML(ArrayList<Compra> datos, String file) {
+
         try {
             XStream xstream = new XStream();
-            xstream.toXML(datos, new FileOutputStream(file));
+            xstream.toXML(datos, new FileOutputStream(this.getFileName(file)));
             System.out.println("Creado fichero XML compras....");
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,9 +37,9 @@ public class SaveXstream implements Saveable {
         ArrayList<Compra> compras = new ArrayList<>();
         XStream xstream = new XStream();
         try {
-            compras = (ArrayList<Compra>) xstream.fromXML(new FileInputStream(file));
+            compras = (ArrayList<Compra>) xstream.fromXML(new FileInputStream(this.getFileName(file)));
         } catch (FileNotFoundException ex) {
-            System.out.println("Fichero nuevo " + file);
+            System.out.println("Fichero nuevo " + this.getFileName(file));
         }
         System.out.println("Fin de listado de compras .....");
         return compras;
@@ -48,7 +49,7 @@ public class SaveXstream implements Saveable {
     public void personasToXML(HashMap<Integer, Persona> datos, String file) {
         try {
             XStream xstream = new XStream();
-            xstream.toXML(datos, new FileOutputStream(file));
+            xstream.toXML(datos, new FileOutputStream(this.getFileName(file)));
             System.out.println("Creado fichero XML....");
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,11 +61,16 @@ public class SaveXstream implements Saveable {
         HashMap<Integer, Persona> personas = new HashMap<>();
         XStream xstream = new XStream();
         try {
-            personas = (HashMap) xstream.fromXML(new FileInputStream(file));
+            personas = (HashMap) xstream.fromXML(new FileInputStream(this.getFileName(file)));
         } catch (FileNotFoundException ex) {
-
         }
         System.out.println("Fin de listado .....");
         return personas;
+    }
+
+    @Override
+    protected String getFileName(String file) {
+        file += ConstantesXstream.FILE_EXTENSION;
+        return file;
     }
 }

@@ -4,6 +4,19 @@
     <datos.Persona>
       <id>1</id>
       <nombre>1</nombre>
+      <compras>
+        <datos.Compra>
+          <cantidad>12</cantidad>
+          <concepto>152</concepto>
+        </datos.Compra>
+      </compras>
+    </datos.Persona>
+  </entry>
+  <entry>
+    <int>2</int>
+    <datos.Persona>
+      <id>2</id>
+      <nombre>2</nombre>
       <compras/>
     </datos.Persona>
   </entry>

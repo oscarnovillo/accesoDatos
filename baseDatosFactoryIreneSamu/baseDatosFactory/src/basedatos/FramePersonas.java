@@ -35,98 +35,121 @@ import util.Constantes;
  */
 public class FramePersonas extends javax.swing.JFrame {
 
-    /**
-     * Creates new form FramePersonas
-     */
-    Comprobacion c = new Comprobacion();
-    Saveable save = null;
-    private String rutaBD = null;
-    HashMap<Integer, Persona> personas = new HashMap<>();
+  /**
+   * Creates new form FramePersonas
+   */
+  Comprobacion c = new Comprobacion();
+  Saveable save = null;
+  private String rutaBD = null;
+  HashMap<Integer, Persona> personas = null;
+  Persona comprasPersona = null;
+  boolean hayCosasQueGuardar = false;
 
-    //<editor-fold defaultstate="collapsed" desc="modelo de la tabla persona">
-    public DefaultTableModel crearModeloPersonas() {
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("ID");
-        model.addColumn("NOMBRE");
-        model.addTableModelListener(new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                if (e.getType() == TableModelEvent.UPDATE) {
-                    String id = jTablePersonas.getValueAt(e.getFirstRow(), Constantes.COLUMN_PERSONA_ID).toString();
-                    Persona p = personas.get(Integer.parseInt(id));
-                    // Se podria hacer sin if pq solo hay una columna
-                    if (e.getColumn() == Constantes.COLUMN_PERSONA_NOMBRE) {
-                        p.setNombre(jTablePersonas.getValueAt(e.getFirstRow(), Constantes.COLUMN_PERSONA_NOMBRE).toString());
-                    }
-                }
-            }
-        });
-
-        return model;
-    }
-
-    public void addPersonaaTabla(Persona p) {
-        DefaultTableModel model = ((DefaultTableModel) jTablePersonas.getModel());
-        model.addRow(new Object[]{p.getId(), p.getNombre()});
-    }
-
-    //</editor-fold>
-    public void vaciarTabla(JTable tabla) {
-        for (int i = 0; i < tabla.getRowCount(); i++) {
-            ((DefaultTableModel) tabla.getModel()).removeRow(i);
+  //<editor-fold defaultstate="collapsed" desc="modelo de la tabla persona">
+  public DefaultTableModel crearModeloPersonas() {
+    DefaultTableModel model = new DefaultTableModel();
+    model.addColumn("ID");
+    model.addColumn("NOMBRE");
+    model.addTableModelListener(new TableModelListener() {
+      @Override
+      public void tableChanged(TableModelEvent e) {
+        if (e.getType() == TableModelEvent.UPDATE) {
+          String id = jTablePersonas.getValueAt(e.getFirstRow(), Constantes.COLUMN_PERSONA_ID).toString();
+          Persona p = personas.get(Integer.parseInt(id));
+          // Se podria hacer sin if pq solo hay una columna
+          if (e.getColumn() == Constantes.COLUMN_PERSONA_NOMBRE) {
+            p.setNombre(jTablePersonas.getValueAt(e.getFirstRow(), Constantes.COLUMN_PERSONA_NOMBRE).toString());
+          }
         }
-    }
+      }
+    });
 
-    public FramePersonas() {
-        initComponents();
-        leerProperties();
-        this.setLocationRelativeTo(null);
-        // OJO tiene que tener un valor al arrancar.
-        cargarFactoria();
-        jTablePersonas.setModel(crearModeloPersonas());
-    }
+    return model;
+  }
 
-    //<editor-fold defaultstate="collapsed" desc="inicializacion">
-    private void leerProperties() {
-        FileReader file = null;
-        Properties p = null;
+  public void addPersonaaTabla(Persona p) {
+    DefaultTableModel model = ((DefaultTableModel) jTablePersonas.getModel());
+    model.addRow(new Object[]{p.getId(), p.getNombre()});
+  }
+
+  //</editor-fold>
+  public DefaultTableModel crearModeloCompras() {
+    DefaultTableModel model = new DefaultTableModel();
+    model.addColumn("CANTIDAD");
+    model.addColumn("CONCEPTO");
+    model.addTableModelListener(new TableModelListener() {
+      @Override
+      public void tableChanged(TableModelEvent e) {
+        if (e.getType() == TableModelEvent.UPDATE) {
+//                    String id = jTableCompras.getValueAt(e.getFirstRow(), Constantes.COLUMN_PERSONA_ID).toString();
+//                    Persona p = personas.get(Integer.parseInt(id));
+//                    // Se podria hacer sin if pq solo hay una columna
+//                    if (e.getColumn() == Constantes.COLUMN_PERSONA_NOMBRE) {
+//                        p.setNombre(jTablePersonas.getValueAt(e.getFirstRow(), Constantes.COLUMN_PERSONA_NOMBRE).toString());
+//                    }
+        }
+      }
+    });
+
+    return model;
+  }
+
+  public void vaciarTabla(JTable tabla) {
+    for (int i = 0; i < tabla.getRowCount(); i++) {
+      ((DefaultTableModel) tabla.getModel()).removeRow(i);
+    }
+  }
+
+  public FramePersonas() {
+    initComponents();
+    leerProperties();
+    this.setLocationRelativeTo(null);
+    // OJO tiene que tener un valor al arrancar.
+    cargarFactoria();
+    jTablePersonas.setModel(crearModeloPersonas());
+  }
+
+  //<editor-fold defaultstate="collapsed" desc="inicializacion">
+  private void leerProperties() {
+    FileReader file = null;
+    Properties p = null;
+    try {
+      p = new Properties();
+      file = new FileReader(Constantes.FICHERO_PROPERTIES);
+      p.load(file);
+      rutaBD = p.getProperty(Constantes.RUTABD_PROPERTY);
+    } catch (FileNotFoundException e) {
+      System.out.println("FileNotFound");
+    } catch (IOException e) {
+      System.out.println("IOEXCeption");
+    } finally {
+      if (file != null) {
         try {
-            p = new Properties();
-            file = new FileReader(Constantes.FICHERO_PROPERTIES);
-            p.load(file);
-            rutaBD = p.getProperty(Constantes.RUTABD_PROPERTY);
-        } catch (FileNotFoundException e) {
-            System.out.println("FileNotFound");
-        } catch (IOException e) {
-            System.out.println("IOEXCeption");
-        } finally {
-            if (file != null) {
-                try {
-                    file.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-            }
+          file.close();
+        } catch (Exception e) {
+          e.printStackTrace();
         }
+      } else {
+      }
     }
+  }
 
-    private void cargarFactoria() {
-        SaveFactory fac = new SaveFactory();
-        if (jComboBoxTipoFactoria.getSelectedItem().equals("JaxB")) {
-            save = fac.build(TiposSave.JAXB);
-        } else {
-            save = fac.build(TiposSave.XSTREAM);
-        }
+  private void cargarFactoria() {
+    SaveFactory fac = new SaveFactory();
+    if (jComboBoxTipoFactoria.getSelectedItem().equals("JaxB")) {
+      save = fac.build(TiposSave.JAXB);
+    } else {
+      save = fac.build(TiposSave.XSTREAM);
     }
-    //</editor-fold>
+  }
+  //</editor-fold>
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
+  /**
+   * This method is called from within the constructor to initialize the form.
+   * WARNING: Do NOT modify this code. The content of this method is always
+   * regenerated by the Form Editor.
+   */
+  @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -377,269 +400,263 @@ public class FramePersonas extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private HashMap<Integer, Persona> deTablaAHashMap() {
-        Persona p = null;
-        // se limpia el hash.
-        personas.clear();
-        for (int i = 0; i < jTablePersonas.getRowCount(); i++) {
-            try {
-                p = new Persona(
-                        Integer.parseInt(jTablePersonas.getModel().getValueAt(i, Constantes.COLUMN_PERSONA_ID).toString()),
-                        (String) jTablePersonas.getModel().getValueAt(i, Constantes.COLUMN_PERSONA_NOMBRE));
-                personas.put(p.getId(), p);
-            } catch (NumberFormatException numberFormatException) {
-                JOptionPane.showMessageDialog(this, "IDs no validos eliminados");
-            }
-        }
-        return personas;
+  // no hace falta porque la memoria y la tabla estan sincronizadas
+  private HashMap<Integer, Persona> deTablaAHashMap() {
+    Persona p = null;
+    // se limpia el hash.
+    personas.clear();
+    for (int i = 0; i < jTablePersonas.getRowCount(); i++) {
+      try {
+        p = new Persona(
+                Integer.parseInt(jTablePersonas.getModel().getValueAt(i, Constantes.COLUMN_PERSONA_ID).toString()),
+                (String) jTablePersonas.getModel().getValueAt(i, Constantes.COLUMN_PERSONA_NOMBRE));
+        personas.put(p.getId(), p);
+      } catch (NumberFormatException numberFormatException) {
+        JOptionPane.showMessageDialog(this, "IDs no validos eliminados");
+      }
     }
+    return personas;
+  }
 
-    private void deHashMapATabla(HashMap<Integer, Persona> personas) {
-        vaciarTabla(jTablePersonas);
-        for (Persona p : personas.values()) {
-            ((DefaultTableModel) jTablePersonas.getModel())
-                    .addRow(new Object[]{p.getId(), p.getNombre()});
-        }
+  private void deHashMapATabla(HashMap<Integer, Persona> personas) {
+    vaciarTabla(jTablePersonas);
+    for (Persona p : personas.values()) {
+      ((DefaultTableModel) jTablePersonas.getModel())
+              .addRow(new Object[]{p.getId(), p.getNombre()});
     }
+  }
 
-    private void crearYAnadirPersona(HashMap<Integer, Persona> hashp, Persona p) {
-        hashp.put(p.getId(), p);
-        this.addPersonaaTabla(p);
-    }
+  private void crearYAnadirPersona(HashMap<Integer, Persona> hashp, Persona p) {
+    hashp.put(p.getId(), p);
+    this.addPersonaaTabla(p);
+  }
 
-    private ArrayList<Compra> deTablaAArray() {
-        ArrayList<Compra> compras = new ArrayList<>();
-        Compra c = null;
-        for (int i = 0; i < jTableCompras.getRowCount(); i++) {
-            try {
-                c = new Compra(
-                        Integer.parseInt(jTableCompras.getModel().getValueAt(i, Constantes.COLUMN_COMPRA_CANTIDAD).toString()),
-                        (String) jTableCompras.getModel().getValueAt(i, Constantes.COLUMN_COMPRA_CONCEPTO));
+  private ArrayList<Compra> deTablaAArray() {
+    ArrayList<Compra> compras = new ArrayList<>();
+    Compra c = null;
+    for (int i = 0; i < jTableCompras.getRowCount(); i++) {
+      try {
+        c = new Compra(
+                Integer.parseInt(jTableCompras.getModel().getValueAt(i, Constantes.COLUMN_COMPRA_CANTIDAD).toString()),
+                (String) jTableCompras.getModel().getValueAt(i, Constantes.COLUMN_COMPRA_CONCEPTO));
 
-                compras.add(c);
-            } catch (NumberFormatException numberFormatException) {
-                JOptionPane.showMessageDialog(this, "Cantidades no validas eliminadas");
-            }
-        }
-        return compras;
-    }
-
-    private void deArrayATabla(ArrayList<Compra> compras) {
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("CANTIDAD");
-        model.addColumn("CONCEPTO");
-        jTableCompras.setModel(model);
-        for (Compra compra : compras) {
-            model.addRow(new Object[]{compra.getCantidad(), compra.getConcepto()});
-        }
-    }
-
-    private void crearYAnadirCompra(ArrayList<Compra> compras, Compra c) {
         compras.add(c);
-        DefaultTableModel model = ((DefaultTableModel) jTableCompras.getModel());
-        model.addRow(new Object[]{c.getCantidad(), c.getConcepto()});
+      } catch (NumberFormatException numberFormatException) {
+        JOptionPane.showMessageDialog(this, "Cantidades no validas eliminadas");
+      }
     }
+    return compras;
+  }
+
+  private void deArrayATabla(ArrayList<Compra> compras) {
+    vaciarTabla(jTableCompras);
+    DefaultTableModel model = ((DefaultTableModel) jTableCompras.getModel());
+    if (compras != null) {
+      for (Compra compra : compras) {
+        model.addRow(new Object[]{compra.getCantidad(), compra.getConcepto()});
+      }
+    }
+  }
+
+  private void crearYAnadirCompra(ArrayList<Compra> compras, Compra c) {
+    compras.add(c);
+    DefaultTableModel model = ((DefaultTableModel) jTableCompras.getModel());
+    model.addRow(new Object[]{c.getCantidad(), c.getConcepto()});
+  }
 
 //<editor-fold defaultstate="collapsed" desc="eventos botones persona">
     private void jButtonCrearPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearPersonaActionPerformed
-        if (jTextId.getText().equals("") || jTextNombre.getText().equals("")) {
-            JOptionPane.showMessageDialog(this, "No has introducido datos para crear la persona");
-        } else {
+      if (jTextId.getText().equals("") || jTextNombre.getText().equals("")) {
+        JOptionPane.showMessageDialog(this, "No has introducido datos para crear la persona");
+      } else {
 
-            try {
-                int enteroTextId = Integer.parseInt(jTextId.getText());
-                if (!personas.containsKey(enteroTextId)) {
-                    crearYAnadirPersona(personas, new Persona(Integer.parseInt(jTextId.getText()), jTextNombre.getText()));
+        try {
+          int enteroTextId = Integer.parseInt(jTextId.getText());
+          if (!personas.containsKey(enteroTextId)) {
+            crearYAnadirPersona(personas, new Persona(Integer.parseInt(jTextId.getText()), jTextNombre.getText()));
 
-                    JOptionPane.showMessageDialog(this, "Creado");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Ese ID ya existe");
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "ID no valido");
-            }
+            JOptionPane.showMessageDialog(this, "Creado");
+          } else {
+            JOptionPane.showMessageDialog(this, "Ese ID ya existe");
+          }
+        } catch (NumberFormatException e) {
+          JOptionPane.showMessageDialog(this, "ID no valido");
         }
+      }
 
     }//GEN-LAST:event_jButtonCrearPersonaActionPerformed
 
     private void jButtonGuardarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarPersonaActionPerformed
-        if (comprobarID() == true) {
-            //personas = deTablaAHashMap();
-            save.personasToXML(personas, Constantes.NOMBREFICHERO_PROPERTY);
-            JOptionPane.showMessageDialog(this, "Guardado");
-        } else {
-            JOptionPane.showMessageDialog(this, "No se puede guardar hasta que no haya IDs sin repetir");
-        }
 
-
+      //personas = deTablaAHashMap();
+      save.personasToXML(personas, Constantes.NOMBREFICHERO_PROPERTY);
+      JOptionPane.showMessageDialog(this, "Guardado");
     }//GEN-LAST:event_jButtonGuardarPersonaActionPerformed
     private void jButtonCargarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargarPersonaActionPerformed
 
-        try {
-            deHashMapATabla(save.personasFromXML(Constantes.NOMBREFICHERO_PROPERTY));
-        } catch (Exception e) {
-        }
+      try {
+        personas = save.personasFromXML(Constantes.NOMBREFICHERO_PROPERTY);
+        deHashMapATabla(personas);
+      } catch (Exception e) {
+      }
 
     }//GEN-LAST:event_jButtonCargarPersonaActionPerformed
 
     private void jButtonComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonComprasActionPerformed
-        try {
-            jDialogCompras.setTitle(personaSeleccionada().getNombre());
-            DefaultTableModel model = new DefaultTableModel();
-            model.addColumn("CANTIDAD");
-            model.addColumn("CONCEPTO");
-            jTableCompras.setModel(model);
-            HashMap<Integer, Persona> personas = deTablaAHashMap();
-            int fila = jTablePersonas.getSelectedRow();
-            if (fila >= 0) {
-                jLabel3.setText("Compras de: " + personaSeleccionada().getNombre());
-                File f = new File(personaSeleccionada().getId() + ".xml");
-                if (f.exists()) {
-                    ArrayList<Compra> compras = save.comprasFromXML(personaSeleccionada().getId() + ".xml");
-                    deArrayATabla(compras);
-                }
-                jDialogCompras.setLocationRelativeTo(null);
-                jDialogCompras.setVisible(true);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Selecciona una persona");
+      try {
+        comprasPersona = personaSeleccionada();
+        jDialogCompras.setTitle(comprasPersona.getNombre());
+        hayCosasQueGuardar = false;
+        jTableCompras.setModel(crearModeloCompras());
+        //HashMap<Integer, Persona> personas = deTablaAHashMap();
+        int fila = jTablePersonas.getSelectedRow();
+        if (fila >= 0) {
+
+          jLabel3.setText("Compras de: " + comprasPersona.getNombre());
+
+          comprasPersona.setCompras(save.comprasFromXML(comprasPersona.getId() + ".xml"));
+          if (comprasPersona.getCompras() == null)
+            comprasPersona.setCompras(new ArrayList<Compra>());
+          deArrayATabla(comprasPersona.getCompras());
+          jDialogCompras.setLocationRelativeTo(null);
+          jDialogCompras.setVisible(true);
         }
+      } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Selecciona una persona");
+      }
     }//GEN-LAST:event_jButtonComprasActionPerformed
     private void jButtonBorrarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarPersonaActionPerformed
-        DefaultTableModel model = ((DefaultTableModel) jTablePersonas.getModel());
-        try {
-            File c = new File(jTablePersonas.getModel().getValueAt(jTablePersonas.getSelectedRow(), Constantes.COLUMN_PERSONA_ID).toString() + ".dat");
-            c.delete();
-            model.removeRow(jTablePersonas.getSelectedRow());
-            HashMap<Integer, Persona> personas = deTablaAHashMap();
-            save.personasToXML(personas, Constantes.NOMBREFICHERO_PROPERTY);
-            JOptionPane.showMessageDialog(this, "Borrado");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Selecciona una persona");
+      DefaultTableModel model = ((DefaultTableModel) jTablePersonas.getModel());
+      try {
+        if (jTablePersonas.getSelectedRow() >= 0) {
+          File c = new File(jTablePersonas.getModel().getValueAt(jTablePersonas.getSelectedRow(), Constantes.COLUMN_PERSONA_ID).toString() + ".dat");
+          c.delete();
+          personas.remove(idPersonaSeleccionada());
+          model.removeRow(jTablePersonas.getSelectedRow());
+          JOptionPane.showMessageDialog(this, "Borrado");
+        } else {
+          JOptionPane.showMessageDialog(this, "Selecciona una persona");
         }
+      } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al borrar persona");
+      }
     }//GEN-LAST:event_jButtonBorrarPersonaActionPerformed
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="eventos botones compras">  
     private void jButtonCancelarComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarComprasActionPerformed
-        jDialogCompras.setVisible(false);
+      cerrarVentanaCompras();
     }//GEN-LAST:event_jButtonCancelarComprasActionPerformed
 
     private void jButtonBorrarComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarComprasActionPerformed
-        DefaultTableModel model = ((DefaultTableModel) jTableCompras.getModel());
-        try {
-            model.removeRow(jTableCompras.getSelectedRow());
-            ArrayList<Compra> compras = deTablaAArray();
-            save.comprasToXML(compras, personaSeleccionada().getId() + ".xml");
-            JOptionPane.showMessageDialog(jDialogCompras, "Borrado");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Selecciona una compra");
-        }
+      DefaultTableModel model = ((DefaultTableModel) jTableCompras.getModel());
+      if (jTableCompras.getSelectedRow() >= 0) {
+        comprasPersona.getCompras().remove(jTableCompras.getSelectedRow());
+        model.removeRow(jTableCompras.getSelectedRow());
+        JOptionPane.showMessageDialog(jDialogCompras, "Borrado");
+        hayCosasQueGuardar = true;
+      } else {
+        JOptionPane.showMessageDialog(this, "Selecciona una compra");
+      }
     }//GEN-LAST:event_jButtonBorrarComprasActionPerformed
 
     private void jButtonGuardarComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarComprasActionPerformed
-        ArrayList<Compra> compras = deTablaAArray();
-        save.comprasToXML(compras, personaSeleccionada().getId() + ".xml");
-        JOptionPane.showMessageDialog(jDialogCompras, "Guardado");
-        //LLamamos otra vez al boton para recargar la tabla
-        jButtonComprasActionPerformed(null);
+      save.comprasToXML(comprasPersona.getCompras(), personaSeleccionada().getId() + ".xml");
+      hayCosasQueGuardar = false;
+      JOptionPane.showMessageDialog(jDialogCompras, "Guardado");
     }//GEN-LAST:event_jButtonGuardarComprasActionPerformed
 
     private void jButtonCrearComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearComprasActionPerformed
-        if (jTextCantidad.getText().equals("") || jTextConcepto.getText().equals("")) {
-            JOptionPane.showMessageDialog(jDialogCompras, "No has introducido datos para crear la compra");
-        } else {
+      if (jTextCantidad.getText().equals("") || jTextConcepto.getText().equals("")) {
+        JOptionPane.showMessageDialog(jDialogCompras, "No has introducido datos para crear la compra");
+      } else {
 
-            try {
-                int enteroTextCantidad = Integer.parseInt(jTextCantidad.getText());
-                ArrayList<Compra> compras = deTablaAArray();
-                crearYAnadirCompra(compras, new Compra(Integer.parseInt(jTextCantidad.getText()), jTextConcepto.getText()));
-                save.comprasToXML(compras, personaSeleccionada().getId() + ".xml");
-                JOptionPane.showMessageDialog(jDialogCompras, "Creado");
-            } catch (NumberFormatException numberFormatException) {
-                JOptionPane.showMessageDialog(jDialogCompras, "Cantidad no valida");
-            }
-
+        try {
+          int enteroTextCantidad = Integer.parseInt(jTextCantidad.getText());
+          crearYAnadirCompra(comprasPersona.getCompras(), new Compra(Integer.parseInt(jTextCantidad.getText()), jTextConcepto.getText()));
+          hayCosasQueGuardar = true;
+          JOptionPane.showMessageDialog(jDialogCompras, "Creado");
+        } catch (NumberFormatException numberFormatException) {
+          JOptionPane.showMessageDialog(jDialogCompras, "Cantidad no valida");
         }
+
+      }
     }//GEN-LAST:event_jButtonCrearComprasActionPerformed
 
     private void jDialogComprasWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogComprasWindowClosing
-        int seleccion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que quieres cerrar sin darle a guardar?");
-        if (seleccion == JOptionPane.YES_OPTION) {
-            jDialogCompras.setVisible(false);
-        } else {
-            jDialogCompras.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        }
+      cerrarVentanaCompras();    }//GEN-LAST:event_jDialogComprasWindowClosing
+  private void cerrarVentanaCompras() {
+    if (hayCosasQueGuardar) {
+      int seleccion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que quieres cerrar sin darle a guardar?");
+      if (seleccion == JOptionPane.YES_OPTION) {
+        jDialogCompras.setVisible(false);
+      } else {
+        jDialogCompras.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+      }
+    } else {
+      jDialogCompras.setVisible(false);
+    }
 
-    }//GEN-LAST:event_jDialogComprasWindowClosing
+  }
+
 //</editor-fold>
 
     private void jComboBoxTipoFactoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoFactoriaActionPerformed
-        cargarFactoria();
+      cargarFactoria();
     }//GEN-LAST:event_jComboBoxTipoFactoriaActionPerformed
 
-    public Persona personaSeleccionada() {
-        int fila = jTablePersonas.getSelectedRow();
-        Persona p = null;
-        if (fila >= 0) {
-            p = personas.get(jTablePersonas.getModel().getValueAt(fila, Constantes.COLUMN_PERSONA_ID).toString());
-        }
-        return p;
+  public Integer idPersonaSeleccionada() {
+    int fila = jTablePersonas.getSelectedRow();
+    Integer id = null;
+    if (fila >= 0) {
+      id = Integer.parseInt(jTablePersonas.getModel().getValueAt(fila, Constantes.COLUMN_PERSONA_ID).toString());
     }
+    return id;
+  }
 
-    // no es necesario.
-    public boolean comprobarID() {
-        int contador = 0;
-        boolean solucion = true;
-        if (jTablePersonas.getSelectedRow() != -1) {
-            for (int i = 0; i < jTablePersonas.getRowCount(); i++) {
-                String existe = jTablePersonas.getModel().getValueAt(i, Constantes.COLUMN_PERSONA_ID).toString();
-                String actual = (String) jTablePersonas.getValueAt(jTablePersonas.getSelectedRow(), Constantes.COLUMN_PERSONA_ID);
-                if (existe.equals(actual)) {
-                    contador++;
-                }
-            }
-            if (contador > 1) {
-                solucion = false;
-            }
-        }
-        return solucion;
+  public Persona personaSeleccionada() {
+    Integer id = idPersonaSeleccionada();
+    Persona p = null;
+    if (id != null) {
+      p = personas.get(id);
     }
+    return p;
+  }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+  /**
+   * @param args the command line arguments
+   */
+  public static void main(String args[]) {
+    /* Set the Nimbus look and feel */
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+     * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+     */
+    try {
+      for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+        if ("Nimbus".equals(info.getName())) {
+          javax.swing.UIManager.setLookAndFeel(info.getClassName());
+          break;
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FramePersonas().setVisible(true);
-            }
-        });
+      }
+    } catch (ClassNotFoundException ex) {
+      java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (InstantiationException ex) {
+      java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (IllegalAccessException ex) {
+      java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+      java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     }
+    //</editor-fold>
+
+    /* Create and display the form */
+    java.awt.EventQueue.invokeLater(new Runnable() {
+      public void run() {
+        new FramePersonas().setVisible(true);
+      }
+    });
+  }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButonCancelarCompras;
     private javax.swing.JButton jButtonBorrarCompras;

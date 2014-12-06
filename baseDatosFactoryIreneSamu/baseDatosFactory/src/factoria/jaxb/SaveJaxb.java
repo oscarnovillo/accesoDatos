@@ -44,6 +44,7 @@ public class SaveJaxb extends Saveable {
     public ArrayList<Compra> comprasFromXML(String file) {
         File f = new File(this.getFileName(file));
         Compras c = null;
+        ArrayList<Compra> compras = null;
         JAXBContext jc = null;
         try {
             jc = JAXBContext.newInstance(Compras.class);
@@ -52,7 +53,10 @@ public class SaveJaxb extends Saveable {
         } catch (JAXBException ex) {
 
         }
-        return c.getCompras();
+        if (c!=null)
+        compras= c.getCompras();
+        
+        return compras;
     }
 
     @Override

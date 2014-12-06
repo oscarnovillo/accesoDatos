@@ -34,7 +34,7 @@ public class SaveXstream extends Saveable {
 
     @Override
     public ArrayList<Compra> comprasFromXML(String file) {
-        ArrayList<Compra> compras = new ArrayList<>();
+        ArrayList<Compra> compras = null;
         XStream xstream = new XStream();
         try {
             compras = (ArrayList<Compra>) xstream.fromXML(new FileInputStream(this.getFileName(file)));

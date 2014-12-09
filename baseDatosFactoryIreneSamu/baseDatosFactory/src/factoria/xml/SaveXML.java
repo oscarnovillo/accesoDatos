@@ -84,13 +84,10 @@ public class SaveXML extends Saveable {
     public void personasToXML(HashMap<Integer, Persona> datos, String nombreFichero) {
         Element raiz = new Element("personas");
         Document document = new Document(raiz);
-        Persona p = null;
-        for (Iterator it = datos.values().iterator(); it.hasNext();) {
-            Element person = new Element("persona");
-            p = (Persona) it.next();
-            person.setAttribute("id", p.getId() + "");
-            person.addContent(new Element("nombre").setText(p.getNombre()));
-            raiz.addContent(person);
+        ConversorPersonaXML conversor = new ConversorPersonaXML();
+        
+        for (Persona p : datos.values()) {
+            raiz.addContent(conversor.personaFromXML(p));
         }
         XMLOutputter xmlOutput = new XMLOutputter();
         xmlOutput.setFormat(Format.getPrettyFormat());
@@ -107,14 +104,13 @@ public class SaveXML extends Saveable {
         HashMap<Integer, Persona> personas = new HashMap<>();
         SAXBuilder saxBuilder = new SAXBuilder();
         File file = new File(this.getFileName(nombreFichero));
-        Persona p = null;
+        ConversorPersonaXML conversor = new ConversorPersonaXML();
         try {
             Document document = saxBuilder.build(file);
             Element rootNode = document.getRootElement();
             List<Element> personasList = rootNode.getChildren("persona");
-            for (int i = 0; i <= personasList.size() - 1; i++) {
-                Element element = personasList.get(i);
-                p = new Persona(Integer.parseInt(element.getAttributeValue("id").toString()), element.getChildText("nombre"));
+            for (Element element : personasList) {
+                Persona p = conversor.personaFromXML(element);
                 personas.put(p.getId(), p);
             }
         } catch (JDOMException ex) {

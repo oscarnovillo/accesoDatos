@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
@@ -73,6 +74,7 @@ public class FramePersonas extends javax.swing.JFrame {
   }
 
   //</editor-fold>
+  
   public DefaultTableModel crearModeloCompras() {
     DefaultTableModel model = new DefaultTableModel();
     model.addColumn("CANTIDAD");
@@ -81,12 +83,6 @@ public class FramePersonas extends javax.swing.JFrame {
       @Override
       public void tableChanged(TableModelEvent e) {
         if (e.getType() == TableModelEvent.UPDATE) {
-//                    String id = jTableCompras.getValueAt(e.getFirstRow(), Constantes.COLUMN_PERSONA_ID).toString();
-//                    Persona p = personas.get(Integer.parseInt(id));
-//                    // Se podria hacer sin if pq solo hay una columna
-//                    if (e.getColumn() == Constantes.COLUMN_PERSONA_NOMBRE) {
-//                        p.setNombre(jTablePersonas.getValueAt(e.getFirstRow(), Constantes.COLUMN_PERSONA_NOMBRE).toString());
-//                    }
         }
       }
     });
@@ -99,12 +95,28 @@ public class FramePersonas extends javax.swing.JFrame {
       ((DefaultTableModel) tabla.getModel()).removeRow(i);
     }
   }
+  
+  
+  private void cargarComboFactoria()
+  {
+//      jComboBoxTipoFactoria.removeAllItems();
+//      jComboBoxTipoFactoria.addItem(TiposSave.XSTREAM.toString());
+//      jComboBoxTipoFactoria.addItem(TiposSave.JAXB.toString());
+//      jComboBoxTipoFactoria.addItem(TiposSave.XML.toString());
+//      jComboBoxTipoFactoria.addItem(TiposSave.JACKSON.toString());
+//      jComboBoxTipoFactoria.addItem(TiposSave.SERIALIZE.toString());
+//      jComboBoxTipoFactoria.addItem(TiposSave.GSON.toString());
+//      jComboBoxTipoFactoria.setSelectedIndex(0);
+      
+      jComboBoxTipoFactoria.setModel(new DefaultComboBoxModel<>(TiposSave.values()));
+  }
 
   public FramePersonas() {
     initComponents();
     leerProperties();
     this.setLocationRelativeTo(null);
     // OJO tiene que tener un valor al arrancar.
+    cargarComboFactoria();
     cargarFactoria();
     jTablePersonas.setModel(crearModeloPersonas());
   }
@@ -136,11 +148,7 @@ public class FramePersonas extends javax.swing.JFrame {
 
   private void cargarFactoria() {
     SaveFactory fac = new SaveFactory();
-    if (jComboBoxTipoFactoria.getSelectedItem().equals("JaxB")) {
-      save = fac.build(TiposSave.JAXB);
-    } else {
-      save = fac.build(TiposSave.XSTREAM);
-    }
+    save = fac.build(TiposSave.valueOf(jComboBoxTipoFactoria.getSelectedItem().toString()));
   }
   //</editor-fold>
 

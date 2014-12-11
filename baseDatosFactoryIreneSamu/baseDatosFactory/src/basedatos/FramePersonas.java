@@ -4,7 +4,6 @@
  */
 package basedatos;
 
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,6 +11,7 @@ import java.util.List;
 import java.util.Properties;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.WindowConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -34,7 +34,7 @@ public class FramePersonas extends javax.swing.JFrame {
      * Creates new form FramePersonas
      */
     private String rutaBD = null;
-    
+
     Document document = null;
     Element compras = null;
 
@@ -55,8 +55,9 @@ public class FramePersonas extends javax.swing.JFrame {
             public void tableChanged(TableModelEvent e) {
                 if (e.getType() == TableModelEvent.UPDATE) {
                     Integer id = Integer.parseInt(jTablePersonas.getValueAt(e.getFirstRow(), Constantes.COLUMN_PERSONA_ID).toString());
-                    changePersonaJDom(id, 
+                    changePersonaJDom(id,
                             jTablePersonas.getValueAt(e.getFirstRow(), Constantes.COLUMN_PERSONA_NOMBRE).toString());
+                     hayCosasQueGuardar = true;
                 }
             }
         });
@@ -64,7 +65,6 @@ public class FramePersonas extends javax.swing.JFrame {
         return model;
     }
 
-    
     private void deJDomATablaPersonas(Document document) {
         List<Element> lista = document.getRootElement().getChildren("persona");
         for (Element element : lista) {
@@ -155,6 +155,7 @@ public class FramePersonas extends javax.swing.JFrame {
                     changeComprajDom(e.getFirstRow(),
                             jTableCompras.getValueAt(e.getFirstRow(), Constantes.COLUMN_COMPRA_CANTIDAD).toString(),
                             jTableCompras.getValueAt(e.getFirstRow(), Constantes.COLUMN_COMPRA_CONCEPTO).toString());
+                     hayCosasQueGuardar = true;
                 }
 
             }
@@ -179,11 +180,10 @@ public class FramePersonas extends javax.swing.JFrame {
     }
 
     //<editor-fold defaultstate="collapsed" desc="inicializacion">
-   private void crearModeloVacio()
-   {
-       document =  new Document(new Element("personas"));
-   }
-    
+    private void crearModeloVacio() {
+        document = new Document(new Element("personas"));
+    }
+
     private void leerProperties() {
         FileReader file = null;
         Properties p = null;
@@ -298,17 +298,16 @@ public class FramePersonas extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextConcepto, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
+                        .addComponent(jTextConcepto))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDialogComprasLayout.createSequentialGroup()
-                        .addComponent(jButtonBorrarCompras, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
+                        .addComponent(jButtonBorrarCompras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonCrearCompras, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                        .addComponent(jButtonCrearCompras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButonVolverCompras, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-                        .addGap(javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE))
+                        .addComponent(jButonVolverCompras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
         jDialogComprasLayout.setVerticalGroup(
             jDialogComprasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -316,13 +315,13 @@ public class FramePersonas extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jDialogComprasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextConcepto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextConcepto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jDialogComprasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDialogComprasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -455,6 +454,7 @@ public class FramePersonas extends javax.swing.JFrame {
                 if (encuentraPersonaConId(enteroTextId) == null) {
                     addPersonaJDom(Integer.parseInt(jTextId.getText()), jTextNombre.getText());
                     addPersonaaTabla(Integer.parseInt(jTextId.getText()), jTextNombre.getText());
+                     hayCosasQueGuardar = true;
                     JOptionPane.showMessageDialog(this, "Creado");
                 } else {
                     JOptionPane.showMessageDialog(this, "Ese ID ya existe");
@@ -470,6 +470,7 @@ public class FramePersonas extends javax.swing.JFrame {
 
         SaveXML save = new SaveXML();
         save.saveToXML(document, Constantes.NOMBREFICHERO_PROPERTY);
+        hayCosasQueGuardar = false;
         JOptionPane.showMessageDialog(this, "Guardado");
     }//GEN-LAST:event_jButtonGuardarPersonaActionPerformed
     private void jButtonCargarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargarPersonaActionPerformed
@@ -477,12 +478,10 @@ public class FramePersonas extends javax.swing.JFrame {
         try {
             SaveXML save = new SaveXML();
             document = save.personasFromXML(Constantes.NOMBREFICHERO_PROPERTY);
-            if (document != null){
+            if (document != null) {
                 deJDomATablaPersonas(document);
                 JOptionPane.showMessageDialog(this, "Cargado");
-            }
-            else
-            {
+            } else {
                 JOptionPane.showMessageDialog(this, "No se ha podido cargar el fichero");
             }
         } catch (Exception e) {
@@ -515,6 +514,7 @@ public class FramePersonas extends javax.swing.JFrame {
             if (jTablePersonas.getSelectedRow() >= 0) {
                 borrarPersonajDom(idPersonaSeleccionada());
                 model.removeRow(jTablePersonas.getSelectedRow());
+                hayCosasQueGuardar = true;
                 JOptionPane.showMessageDialog(this, "Borrado");
             } else {
                 JOptionPane.showMessageDialog(this, "Selecciona una persona");
@@ -527,7 +527,7 @@ public class FramePersonas extends javax.swing.JFrame {
 
 //<editor-fold defaultstate="collapsed" desc="eventos botones compras">  
     private void jButtonCancelarComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarComprasActionPerformed
-         jDialogCompras.setVisible(false);
+        jDialogCompras.setVisible(false);
     }//GEN-LAST:event_jButtonCancelarComprasActionPerformed
 
     private void jButtonBorrarComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarComprasActionPerformed
@@ -551,6 +551,7 @@ public class FramePersonas extends javax.swing.JFrame {
                 int enteroTextCantidad = Integer.parseInt(jTextCantidad.getText());
                 addComprajDom(enteroTextCantidad, jTextConcepto.getText());
                 addCompraaTabla(enteroTextCantidad, jTextConcepto.getText());
+                 hayCosasQueGuardar = true;
                 JOptionPane.showMessageDialog(jDialogCompras, "Creado");
             } catch (NumberFormatException numberFormatException) {
                 JOptionPane.showMessageDialog(jDialogCompras, "Cantidad no valida");
@@ -560,7 +561,16 @@ public class FramePersonas extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCrearComprasActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO add your handling code here:
+        if (hayCosasQueGuardar) {
+            int seleccion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que quieres cerrar sin darle a guardar?");
+            if (seleccion == JOptionPane.YES_OPTION) {
+                this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            } else {
+                this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+            }
+        } else {
+            this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        }
     }//GEN-LAST:event_formWindowClosing
 
     public Integer idPersonaSeleccionada() {

@@ -1,1 +1,16 @@
-{"1":{"id":1,"nombre":"1","compras":[{"cantidad":12,"concepto":"152"}]},"2":{"id":2,"nombre":"2","compras":[]}}
+<?xml version="1.0" encoding="UTF-8"?>
+<personas>
+  <persona id="12">
+    <nombre>14</nombre>
+    <compras>
+      <compra>
+        <cantidad>1</cantidad>
+        <concepto>222</concepto>
+      </compra>
+      <compra>
+        <cantidad>13</cantidad>
+        <concepto>22233</concepto>
+      </compra>
+    </compras>
+  </persona>
+</personas>

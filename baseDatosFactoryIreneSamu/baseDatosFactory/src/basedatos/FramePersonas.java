@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +29,15 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import negocio.Comprobacion;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import storage.SaveXML;
 import util.Constantes;
 
 /**
@@ -36,128 +46,193 @@ import util.Constantes;
  */
 public class FramePersonas extends javax.swing.JFrame {
 
-  /**
-   * Creates new form FramePersonas
-   */
-  Comprobacion c = new Comprobacion();
-  Saveable save = null;
-  private String rutaBD = null;
-  HashMap<Integer, Persona> personas = null;
-  Persona comprasPersona = null;
-  boolean hayCosasQueGuardar = false;
+    /**
+     * Creates new form FramePersonas
+     */
+    Comprobacion c = new Comprobacion();
+    Saveable save = null;
+    private String rutaBD = null;
+    
+    Document document = null;
+    Element compras = null;
 
-  //<editor-fold defaultstate="collapsed" desc="modelo de la tabla persona">
-  public DefaultTableModel crearModeloPersonas() {
-    DefaultTableModel model = new DefaultTableModel();
-    model.addColumn("ID");
-    model.addColumn("NOMBRE");
-    model.addTableModelListener(new TableModelListener() {
-      @Override
-      public void tableChanged(TableModelEvent e) {
-        if (e.getType() == TableModelEvent.UPDATE) {
-          String id = jTablePersonas.getValueAt(e.getFirstRow(), Constantes.COLUMN_PERSONA_ID).toString();
-          Persona p = personas.get(Integer.parseInt(id));
-          // Se podria hacer sin if pq solo hay una columna
-          if (e.getColumn() == Constantes.COLUMN_PERSONA_NOMBRE) {
-            p.setNombre(jTablePersonas.getValueAt(e.getFirstRow(), Constantes.COLUMN_PERSONA_NOMBRE).toString());
-          }
-        }
-      }
-    });
+    boolean hayCosasQueGuardar = false;
 
-    return model;
-  }
+    //<editor-fold defaultstate="collapsed" desc="modelo de la tabla persona">
+    public DefaultTableModel crearModeloPersonas() {
+        DefaultTableModel model = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int col) {
+                return col == Constantes.COLUMN_PERSONA_NOMBRE;
+            }
+        };
+        model.addColumn("ID");
+        model.addColumn("NOMBRE");
+        model.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                if (e.getType() == TableModelEvent.UPDATE) {
+                    Integer id = Integer.parseInt(jTablePersonas.getValueAt(e.getFirstRow(), Constantes.COLUMN_PERSONA_ID).toString());
+                    changePersonaJDom(id, 
+                            jTablePersonas.getValueAt(e.getFirstRow(), Constantes.COLUMN_PERSONA_NOMBRE).toString());
+                }
+            }
+        });
 
-  public void addPersonaaTabla(Persona p) {
-    DefaultTableModel model = ((DefaultTableModel) jTablePersonas.getModel());
-    model.addRow(new Object[]{p.getId(), p.getNombre()});
-  }
-
-  //</editor-fold>
-  
-  public DefaultTableModel crearModeloCompras() {
-    DefaultTableModel model = new DefaultTableModel();
-    model.addColumn("CANTIDAD");
-    model.addColumn("CONCEPTO");
-    model.addTableModelListener(new TableModelListener() {
-      @Override
-      public void tableChanged(TableModelEvent e) {
-        if (e.getType() == TableModelEvent.UPDATE) {
-        }
-      }
-    });
-
-    return model;
-  }
-
-  public void vaciarTabla(JTable tabla) {
-    for (int i = 0; i < tabla.getRowCount(); i++) {
-      ((DefaultTableModel) tabla.getModel()).removeRow(i);
+        return model;
     }
-  }
-  
-  
-  private void cargarComboFactoria()
-  {
-//      jComboBoxTipoFactoria.removeAllItems();
-//      jComboBoxTipoFactoria.addItem(TiposSave.XSTREAM.toString());
-//      jComboBoxTipoFactoria.addItem(TiposSave.JAXB.toString());
-//      jComboBoxTipoFactoria.addItem(TiposSave.XML.toString());
-//      jComboBoxTipoFactoria.addItem(TiposSave.JACKSON.toString());
-//      jComboBoxTipoFactoria.addItem(TiposSave.SERIALIZE.toString());
-//      jComboBoxTipoFactoria.addItem(TiposSave.GSON.toString());
-//      jComboBoxTipoFactoria.setSelectedIndex(0);
-      
-      jComboBoxTipoFactoria.setModel(new DefaultComboBoxModel<>(TiposSave.values()));
-  }
 
-  public FramePersonas() {
-    initComponents();
-    leerProperties();
-    this.setLocationRelativeTo(null);
-    // OJO tiene que tener un valor al arrancar.
-    cargarComboFactoria();
-    cargarFactoria();
-    jTablePersonas.setModel(crearModeloPersonas());
-  }
+    
+    private void deJDomATablaPersonas(Document document) {
+        List<Element> lista = document.getRootElement().getChildren("persona");
+        for (Element element : lista) {
+            ((DefaultTableModel) jTablePersonas.getModel()).addRow(new Object[]{element.getAttributeValue("id"), element.getChildText("nombre")});
+        }
+    }
 
-  //<editor-fold defaultstate="collapsed" desc="inicializacion">
-  private void leerProperties() {
-    FileReader file = null;
-    Properties p = null;
-    try {
-      p = new Properties();
-      file = new FileReader(Constantes.FICHERO_PROPERTIES);
-      p.load(file);
-      rutaBD = p.getProperty(Constantes.RUTABD_PROPERTY);
-    } catch (FileNotFoundException e) {
-      System.out.println("FileNotFound");
-    } catch (IOException e) {
-      System.out.println("IOEXCeption");
-    } finally {
-      if (file != null) {
+    private void deJDomATablaCompras(Element compras) {
+        List<Element> lista = compras.getChildren("compra");
+        for (Element element : lista) {
+            ((DefaultTableModel) jTablePersonas.getModel()).addRow(new Object[]{element.getAttributeValue("id"), element.getChildText("nombre")});
+        }
+    }
+
+    public Element encuentraPersonaConId(Integer id) {
+        Element encontrado = null;
+
+        XPathFactory xFactory = XPathFactory.instance();
+        XPathExpression<Element> expr = xFactory.compile("/personas/persona[@id = " + id + "]", Filters.element());
+        encontrado = expr.evaluateFirst(document);
+
+        return encontrado;
+    }
+
+    public Element encuentraCompraConIndice(int indice) {
+        Element encontrado = null;
+        encontrado = compras.getChildren().get(indice);
+        return encontrado;
+    }
+
+    public void addPersonaJDom(Integer id, String nombre) {
+        Element persona = new Element("persona");
+        persona.setAttribute(new Attribute("id", id + ""));
+        persona.addContent(new Element("nombre").setText(nombre));
+        persona.addContent(new Element("compras"));
+        document.getRootElement().addContent(persona);
+    }
+
+    public void changePersonaJDom(Integer id, String nombre) {
+        Element persona = encuentraPersonaConId(id);
+        persona.getChild("nombre").setText(nombre);
+    }
+
+    public void borrarPersonajDom(Integer id) {
+        XPathFactory xFactory = XPathFactory.instance();
+        XPathExpression<Element> expr = xFactory.compile("/personas/persona[@id = " + id + "]", Filters.element());
+        Element resultado = expr.evaluateFirst(document);
+        resultado.detach();
+    }
+
+    public void borrarComprasjDom(int indice) {
+        Element compra = encuentraCompraConIndice(indice);
+        compra.detach();
+    }
+
+    public void changeComprajDom(int indice, String cantidad, String nombre) {
+        Element compra = encuentraCompraConIndice(indice);
+        compra.getChild("cantidad").setText(cantidad + "");
+        compra.getChild("concepto").setText(nombre);
+        compras.addContent(compra);
+    }
+
+    public void addComprajDom(int cantidad, String nombre) {
+        Element compra = new Element("compra");
+        compra.addContent(new Element("cantidad").setText(cantidad + ""));
+        compra.addContent(new Element("concepto").setText(nombre));
+        compras.addContent(compra);
+    }
+
+    public void addCompraaTabla(int cantidad, String nombre) {
+        ((DefaultTableModel) jTableCompras.getModel()).addRow(new Object[]{cantidad, nombre});
+    }
+
+    public void addPersonaaTabla(int id, String nombre) {
+        DefaultTableModel model = ((DefaultTableModel) jTablePersonas.getModel());
+        model.addRow(new Object[]{id, nombre});
+    }
+
+    //</editor-fold>
+    public DefaultTableModel crearModeloCompras() {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("CANTIDAD");
+        model.addColumn("CONCEPTO");
+        model.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                if (e.getType() == TableModelEvent.UPDATE) {
+                    changeComprajDom(e.getFirstRow(),
+                            jTableCompras.getValueAt(e.getFirstRow(), Constantes.COLUMN_COMPRA_CANTIDAD).toString(),
+                            jTableCompras.getValueAt(e.getFirstRow(), Constantes.COLUMN_COMPRA_CONCEPTO).toString());
+                }
+
+            }
+        });
+
+        return model;
+    }
+
+    public void vaciarTabla(JTable tabla) {
+        for (int i = 0; i < tabla.getRowCount(); i++) {
+            ((DefaultTableModel) tabla.getModel()).removeRow(i);
+        }
+    }
+
+    public FramePersonas() {
+        initComponents();
+        leerProperties();
+        crearModeloVacio();
+        this.setLocationRelativeTo(null);
+        jTablePersonas.setModel(crearModeloPersonas());
+        jTableCompras.setModel(crearModeloCompras());
+    }
+
+    //<editor-fold defaultstate="collapsed" desc="inicializacion">
+   private void crearModeloVacio()
+   {
+       document =  new Document(new Element("personas"));
+   }
+    
+    private void leerProperties() {
+        FileReader file = null;
+        Properties p = null;
         try {
-          file.close();
-        } catch (Exception e) {
-          e.printStackTrace();
+            p = new Properties();
+            file = new FileReader(Constantes.FICHERO_PROPERTIES);
+            p.load(file);
+            rutaBD = p.getProperty(Constantes.RUTABD_PROPERTY);
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFound");
+        } catch (IOException e) {
+            System.out.println("IOEXCeption");
+        } finally {
+            if (file != null) {
+                try {
+                    file.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+            }
         }
-      } else {
-      }
     }
-  }
 
-  private void cargarFactoria() {
-    SaveFactory fac = new SaveFactory();
-    save = fac.build(TiposSave.valueOf(jComboBoxTipoFactoria.getSelectedItem().toString()));
-  }
-  //</editor-fold>
-
-  /**
-   * This method is called from within the constructor to initialize the form.
-   * WARNING: Do NOT modify this code. The content of this method is always
-   * regenerated by the Form Editor.
-   */
-  @SuppressWarnings("unchecked")
+    //</editor-fold>
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -165,10 +240,9 @@ public class FramePersonas extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableCompras = new javax.swing.JTable();
         jButtonCrearCompras = new javax.swing.JButton();
-        jbuttonGuardarCompras = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jButtonBorrarCompras = new javax.swing.JButton();
-        jButonCancelarCompras = new javax.swing.JButton();
+        jButonVolverCompras = new javax.swing.JButton();
         jTextCantidad = new javax.swing.JTextField();
         jTextConcepto = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -184,15 +258,9 @@ public class FramePersonas extends javax.swing.JFrame {
         jButtonBorrarPersona = new javax.swing.JButton();
         jButtonCargarPersona = new javax.swing.JButton();
         jButtonGuardarPersona = new javax.swing.JButton();
-        jComboBoxTipoFactoria = new javax.swing.JComboBox();
 
         jDialogCompras.setMinimumSize(new java.awt.Dimension(400, 400));
         jDialogCompras.setModal(true);
-        jDialogCompras.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                jDialogComprasWindowClosing(evt);
-            }
-        });
 
         jTableCompras.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -214,13 +282,6 @@ public class FramePersonas extends javax.swing.JFrame {
             }
         });
 
-        jbuttonGuardarCompras.setText("Guardar");
-        jbuttonGuardarCompras.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonGuardarComprasActionPerformed(evt);
-            }
-        });
-
         jLabel3.setText("Cliente");
 
         jButtonBorrarCompras.setText("Borrar");
@@ -230,8 +291,8 @@ public class FramePersonas extends javax.swing.JFrame {
             }
         });
 
-        jButonCancelarCompras.setText("Cancelar");
-        jButonCancelarCompras.addActionListener(new java.awt.event.ActionListener() {
+        jButonVolverCompras.setText("Volver");
+        jButonVolverCompras.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelarComprasActionPerformed(evt);
             }
@@ -261,12 +322,11 @@ public class FramePersonas extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonCrearCompras, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButonCancelarCompras, javax.swing.GroupLayout.PREFERRED_SIZE, 90, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbuttonGuardarCompras, javax.swing.GroupLayout.PREFERRED_SIZE, 90, Short.MAX_VALUE))
+                        .addComponent(jButonVolverCompras, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                        .addGap(javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE))
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jDialogComprasLayout.setVerticalGroup(
             jDialogComprasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -274,7 +334,7 @@ public class FramePersonas extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jDialogComprasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -285,13 +345,17 @@ public class FramePersonas extends javax.swing.JFrame {
                 .addGroup(jDialogComprasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDialogComprasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButtonBorrarCompras)
-                        .addComponent(jButtonCrearCompras)
-                        .addComponent(jbuttonGuardarCompras))
-                    .addComponent(jButonCancelarCompras))
+                        .addComponent(jButtonCrearCompras))
+                    .addComponent(jButonVolverCompras))
                 .addContainerGap())
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jTablePersonas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -345,13 +409,6 @@ public class FramePersonas extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxTipoFactoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Xstream", "JaxB" }));
-        jComboBoxTipoFactoria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxTipoFactoriaActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -380,15 +437,12 @@ public class FramePersonas extends javax.swing.JFrame {
                         .addComponent(jButtonCargarPersona, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
                         .addGap(6, 6, 6)))
                 .addContainerGap())
-            .addComponent(jComboBoxTipoFactoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
-                .addGap(1, 1, 1)
-                .addComponent(jComboBoxTipoFactoria)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -408,265 +462,170 @@ public class FramePersonas extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-  // no hace falta porque la memoria y la tabla estan sincronizadas
-  private HashMap<Integer, Persona> deTablaAHashMap() {
-    Persona p = null;
-    // se limpia el hash.
-    personas.clear();
-    for (int i = 0; i < jTablePersonas.getRowCount(); i++) {
-      try {
-        p = new Persona(
-                Integer.parseInt(jTablePersonas.getModel().getValueAt(i, Constantes.COLUMN_PERSONA_ID).toString()),
-                (String) jTablePersonas.getModel().getValueAt(i, Constantes.COLUMN_PERSONA_NOMBRE));
-        personas.put(p.getId(), p);
-      } catch (NumberFormatException numberFormatException) {
-        JOptionPane.showMessageDialog(this, "IDs no validos eliminados");
-      }
-    }
-    return personas;
-  }
-
-  private void deHashMapATabla(HashMap<Integer, Persona> personas) {
-    vaciarTabla(jTablePersonas);
-    for (Persona p : personas.values()) {
-      ((DefaultTableModel) jTablePersonas.getModel())
-              .addRow(new Object[]{p.getId(), p.getNombre()});
-    }
-  }
-
-  private void crearYAnadirPersona(HashMap<Integer, Persona> hashp, Persona p) {
-    hashp.put(p.getId(), p);
-    this.addPersonaaTabla(p);
-  }
-
-  private ArrayList<Compra> deTablaAArray() {
-    ArrayList<Compra> compras = new ArrayList<>();
-    Compra c = null;
-    for (int i = 0; i < jTableCompras.getRowCount(); i++) {
-      try {
-        c = new Compra(
-                Integer.parseInt(jTableCompras.getModel().getValueAt(i, Constantes.COLUMN_COMPRA_CANTIDAD).toString()),
-                (String) jTableCompras.getModel().getValueAt(i, Constantes.COLUMN_COMPRA_CONCEPTO));
-
-        compras.add(c);
-      } catch (NumberFormatException numberFormatException) {
-        JOptionPane.showMessageDialog(this, "Cantidades no validas eliminadas");
-      }
-    }
-    return compras;
-  }
-
-  private void deArrayATabla(ArrayList<Compra> compras) {
-    vaciarTabla(jTableCompras);
-    DefaultTableModel model = ((DefaultTableModel) jTableCompras.getModel());
-    if (compras != null) {
-      for (Compra compra : compras) {
-        model.addRow(new Object[]{compra.getCantidad(), compra.getConcepto()});
-      }
-    }
-  }
-
-  private void crearYAnadirCompra(ArrayList<Compra> compras, Compra c) {
-    compras.add(c);
-    DefaultTableModel model = ((DefaultTableModel) jTableCompras.getModel());
-    model.addRow(new Object[]{c.getCantidad(), c.getConcepto()});
-  }
-
 //<editor-fold defaultstate="collapsed" desc="eventos botones persona">
     private void jButtonCrearPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearPersonaActionPerformed
-      if (jTextId.getText().equals("") || jTextNombre.getText().equals("")) {
-        JOptionPane.showMessageDialog(this, "No has introducido datos para crear la persona");
-      } else {
+        if (jTextId.getText().equals("") || jTextNombre.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "No has introducido datos para crear la persona");
+        } else {
 
-        try {
-          int enteroTextId = Integer.parseInt(jTextId.getText());
-          if (!personas.containsKey(enteroTextId)) {
-            crearYAnadirPersona(personas, new Persona(Integer.parseInt(jTextId.getText()), jTextNombre.getText()));
-
-            JOptionPane.showMessageDialog(this, "Creado");
-          } else {
-            JOptionPane.showMessageDialog(this, "Ese ID ya existe");
-          }
-        } catch (NumberFormatException e) {
-          JOptionPane.showMessageDialog(this, "ID no valido");
+            try {
+                int enteroTextId = Integer.parseInt(jTextId.getText());
+                if (encuentraPersonaConId(enteroTextId) == null) {
+                    addPersonaJDom(Integer.parseInt(jTextId.getText()), jTextNombre.getText());
+                    addPersonaaTabla(Integer.parseInt(jTextId.getText()), jTextNombre.getText());
+                    JOptionPane.showMessageDialog(this, "Creado");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Ese ID ya existe");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "ID no valido");
+            }
         }
-      }
 
     }//GEN-LAST:event_jButtonCrearPersonaActionPerformed
 
     private void jButtonGuardarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarPersonaActionPerformed
 
-      //personas = deTablaAHashMap();
-      save.personasToXML(personas, Constantes.NOMBREFICHERO_PROPERTY);
-      JOptionPane.showMessageDialog(this, "Guardado");
+        SaveXML save = new SaveXML();
+        save.saveToXML(document, Constantes.NOMBREFICHERO_PROPERTY);
+        JOptionPane.showMessageDialog(this, "Guardado");
     }//GEN-LAST:event_jButtonGuardarPersonaActionPerformed
     private void jButtonCargarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargarPersonaActionPerformed
 
-      try {
-        personas = save.personasFromXML(Constantes.NOMBREFICHERO_PROPERTY);
-        deHashMapATabla(personas);
-      } catch (Exception e) {
-      }
+        try {
+            SaveXML save = new SaveXML();
+            document = save.personasFromXML(Constantes.NOMBREFICHERO_PROPERTY);
+            if (document != null){
+                deJDomATablaPersonas(document);
+                JOptionPane.showMessageDialog(this, "Cargado");
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "No se ha podido cargar el fichero");
+            }
+        } catch (Exception e) {
+        }
 
     }//GEN-LAST:event_jButtonCargarPersonaActionPerformed
 
     private void jButtonComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonComprasActionPerformed
-      try {
-        comprasPersona = personaSeleccionada();
-        jDialogCompras.setTitle(comprasPersona.getNombre());
-        hayCosasQueGuardar = false;
-        jTableCompras.setModel(crearModeloCompras());
-        //HashMap<Integer, Persona> personas = deTablaAHashMap();
-        int fila = jTablePersonas.getSelectedRow();
-        if (fila >= 0) {
+        try {
+            int fila = jTablePersonas.getSelectedRow();
+            if (fila >= 0) {
+                Element persona = encuentraPersonaConId(idPersonaSeleccionada());
+                jDialogCompras.setTitle(persona.getChild("nombre").getText());
+                hayCosasQueGuardar = false;
 
-          jLabel3.setText("Compras de: " + comprasPersona.getNombre());
+                jLabel3.setText("Compras de: " + persona.getChild("nombre").getText());
 
-          comprasPersona.setCompras(save.comprasFromXML(comprasPersona.getId() + ".xml"));
-          if (comprasPersona.getCompras() == null)
-            comprasPersona.setCompras(new ArrayList<Compra>());
-          deArrayATabla(comprasPersona.getCompras());
-          jDialogCompras.setLocationRelativeTo(null);
-          jDialogCompras.setVisible(true);
+                compras = persona.getChild("compras");
+                deJDomATablaCompras(compras);
+                jDialogCompras.setLocationRelativeTo(null);
+                jDialogCompras.setVisible(true);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Selecciona una persona");
         }
-      } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Selecciona una persona");
-      }
     }//GEN-LAST:event_jButtonComprasActionPerformed
     private void jButtonBorrarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarPersonaActionPerformed
-      DefaultTableModel model = ((DefaultTableModel) jTablePersonas.getModel());
-      try {
-        if (jTablePersonas.getSelectedRow() >= 0) {
-          File c = new File(jTablePersonas.getModel().getValueAt(jTablePersonas.getSelectedRow(), Constantes.COLUMN_PERSONA_ID).toString() + ".dat");
-          c.delete();
-          personas.remove(idPersonaSeleccionada());
-          model.removeRow(jTablePersonas.getSelectedRow());
-          JOptionPane.showMessageDialog(this, "Borrado");
-        } else {
-          JOptionPane.showMessageDialog(this, "Selecciona una persona");
+        DefaultTableModel model = ((DefaultTableModel) jTablePersonas.getModel());
+        try {
+            if (jTablePersonas.getSelectedRow() >= 0) {
+                borrarPersonajDom(idPersonaSeleccionada());
+                model.removeRow(jTablePersonas.getSelectedRow());
+                JOptionPane.showMessageDialog(this, "Borrado");
+            } else {
+                JOptionPane.showMessageDialog(this, "Selecciona una persona");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al borrar persona");
         }
-      } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al borrar persona");
-      }
     }//GEN-LAST:event_jButtonBorrarPersonaActionPerformed
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="eventos botones compras">  
     private void jButtonCancelarComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarComprasActionPerformed
-      cerrarVentanaCompras();
+         jDialogCompras.setVisible(false);
     }//GEN-LAST:event_jButtonCancelarComprasActionPerformed
 
     private void jButtonBorrarComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarComprasActionPerformed
-      DefaultTableModel model = ((DefaultTableModel) jTableCompras.getModel());
-      if (jTableCompras.getSelectedRow() >= 0) {
-        comprasPersona.getCompras().remove(jTableCompras.getSelectedRow());
-        model.removeRow(jTableCompras.getSelectedRow());
-        JOptionPane.showMessageDialog(jDialogCompras, "Borrado");
-        hayCosasQueGuardar = true;
-      } else {
-        JOptionPane.showMessageDialog(this, "Selecciona una compra");
-      }
+        DefaultTableModel model = ((DefaultTableModel) jTableCompras.getModel());
+        if (jTableCompras.getSelectedRow() >= 0) {
+            borrarComprasjDom(jTableCompras.getSelectedRow());
+            model.removeRow(jTableCompras.getSelectedRow());
+            JOptionPane.showMessageDialog(jDialogCompras, "Borrado");
+            hayCosasQueGuardar = true;
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecciona una compra");
+        }
     }//GEN-LAST:event_jButtonBorrarComprasActionPerformed
 
-    private void jButtonGuardarComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarComprasActionPerformed
-      save.comprasToXML(comprasPersona.getCompras(), personaSeleccionada().getId() + ".xml");
-      hayCosasQueGuardar = false;
-      JOptionPane.showMessageDialog(jDialogCompras, "Guardado");
-    }//GEN-LAST:event_jButtonGuardarComprasActionPerformed
-
     private void jButtonCrearComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearComprasActionPerformed
-      if (jTextCantidad.getText().equals("") || jTextConcepto.getText().equals("")) {
-        JOptionPane.showMessageDialog(jDialogCompras, "No has introducido datos para crear la compra");
-      } else {
+        if (jTextCantidad.getText().equals("") || jTextConcepto.getText().equals("")) {
+            JOptionPane.showMessageDialog(jDialogCompras, "No has introducido datos para crear la compra");
+        } else {
 
-        try {
-          int enteroTextCantidad = Integer.parseInt(jTextCantidad.getText());
-          crearYAnadirCompra(comprasPersona.getCompras(), new Compra(Integer.parseInt(jTextCantidad.getText()), jTextConcepto.getText()));
-          hayCosasQueGuardar = true;
-          JOptionPane.showMessageDialog(jDialogCompras, "Creado");
-        } catch (NumberFormatException numberFormatException) {
-          JOptionPane.showMessageDialog(jDialogCompras, "Cantidad no valida");
+            try {
+                int enteroTextCantidad = Integer.parseInt(jTextCantidad.getText());
+                addComprajDom(enteroTextCantidad, jTextConcepto.getText());
+                addCompraaTabla(enteroTextCantidad, jTextConcepto.getText());
+                JOptionPane.showMessageDialog(jDialogCompras, "Creado");
+            } catch (NumberFormatException numberFormatException) {
+                JOptionPane.showMessageDialog(jDialogCompras, "Cantidad no valida");
+            }
+
         }
-
-      }
     }//GEN-LAST:event_jButtonCrearComprasActionPerformed
 
-    private void jDialogComprasWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialogComprasWindowClosing
-      cerrarVentanaCompras();    }//GEN-LAST:event_jDialogComprasWindowClosing
-  private void cerrarVentanaCompras() {
-    if (hayCosasQueGuardar) {
-      int seleccion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que quieres cerrar sin darle a guardar?");
-      if (seleccion == JOptionPane.YES_OPTION) {
-        jDialogCompras.setVisible(false);
-      } else {
-        jDialogCompras.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-      }
-    } else {
-      jDialogCompras.setVisible(false);
-    }
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formWindowClosing
 
-  }
-
-//</editor-fold>
-
-    private void jComboBoxTipoFactoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoFactoriaActionPerformed
-      cargarFactoria();
-    }//GEN-LAST:event_jComboBoxTipoFactoriaActionPerformed
-
-  public Integer idPersonaSeleccionada() {
-    int fila = jTablePersonas.getSelectedRow();
-    Integer id = null;
-    if (fila >= 0) {
-      id = Integer.parseInt(jTablePersonas.getModel().getValueAt(fila, Constantes.COLUMN_PERSONA_ID).toString());
-    }
-    return id;
-  }
-
-  public Persona personaSeleccionada() {
-    Integer id = idPersonaSeleccionada();
-    Persona p = null;
-    if (id != null) {
-      p = personas.get(id);
-    }
-    return p;
-  }
-
-  /**
-   * @param args the command line arguments
-   */
-  public static void main(String args[]) {
-    /* Set the Nimbus look and feel */
-    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-     * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-     */
-    try {
-      for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-        if ("Nimbus".equals(info.getName())) {
-          javax.swing.UIManager.setLookAndFeel(info.getClassName());
-          break;
+    public Integer idPersonaSeleccionada() {
+        int fila = jTablePersonas.getSelectedRow();
+        Integer id = null;
+        if (fila >= 0) {
+            id = Integer.parseInt(jTablePersonas.getModel().getValueAt(fila, Constantes.COLUMN_PERSONA_ID).toString());
         }
-      }
-    } catch (ClassNotFoundException ex) {
-      java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (InstantiationException ex) {
-      java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (IllegalAccessException ex) {
-      java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-      java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        return id;
     }
-    //</editor-fold>
 
-    /* Create and display the form */
-    java.awt.EventQueue.invokeLater(new Runnable() {
-      public void run() {
-        new FramePersonas().setVisible(true);
-      }
-    });
-  }
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(FramePersonas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new FramePersonas().setVisible(true);
+            }
+        });
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButonCancelarCompras;
+    private javax.swing.JButton jButonVolverCompras;
     private javax.swing.JButton jButtonBorrarCompras;
     private javax.swing.JButton jButtonBorrarPersona;
     private javax.swing.JButton jButtonCargarPersona;
@@ -674,7 +633,6 @@ public class FramePersonas extends javax.swing.JFrame {
     private javax.swing.JButton jButtonCrearCompras;
     private javax.swing.JButton jButtonCrearPersona;
     private javax.swing.JButton jButtonGuardarPersona;
-    private javax.swing.JComboBox jComboBoxTipoFactoria;
     private javax.swing.JDialog jDialogCompras;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -689,6 +647,5 @@ public class FramePersonas extends javax.swing.JFrame {
     private javax.swing.JTextField jTextConcepto;
     private javax.swing.JTextField jTextId;
     private javax.swing.JTextField jTextNombre;
-    private javax.swing.JButton jbuttonGuardarCompras;
     // End of variables declaration//GEN-END:variables
 }

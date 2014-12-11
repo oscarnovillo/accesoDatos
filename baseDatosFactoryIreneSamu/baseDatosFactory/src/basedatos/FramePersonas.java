@@ -4,37 +4,21 @@
  */
 package basedatos;
 
-import datos.Compra;
-import datos.Persona;
-import factoria.TiposSave;
-import factoria.SaveFactory;
-import factoria.Saveable;
-import java.io.File;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.WindowConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import negocio.Comprobacion;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
 import org.jdom2.filter.Filters;
-import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import storage.SaveXML;
@@ -49,8 +33,6 @@ public class FramePersonas extends javax.swing.JFrame {
     /**
      * Creates new form FramePersonas
      */
-    Comprobacion c = new Comprobacion();
-    Saveable save = null;
     private String rutaBD = null;
     
     Document document = null;

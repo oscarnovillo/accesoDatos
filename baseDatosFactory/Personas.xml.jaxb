@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<personas>
+    <personas>
+        <entry>
+            <key>1</key>
+            <value>
+                <id>1</id>
+                <nombre>1</nombre>
+            </value>
+        </entry>
+        <entry>
+            <key>2</key>
+            <value>
+                <id>2</id>
+                <nombre>2</nombre>
+            </value>
+        </entry>
+    </personas>
+</personas>

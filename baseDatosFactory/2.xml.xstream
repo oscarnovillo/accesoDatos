@@ -1,0 +1,10 @@
+<list>
+  <datos.Compra>
+    <cantidad>2</cantidad>
+    <concepto>2</concepto>
+  </datos.Compra>
+  <datos.Compra>
+    <cantidad>28</cantidad>
+    <concepto>2</concepto>
+  </datos.Compra>
+</list>

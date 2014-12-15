@@ -27,7 +27,7 @@ public class TestFicherosConcesionarios {
             //    <franquicia id="5" formato="objetos"/>
             //    <franquicia id="6" formato="json"/>
 
-            Franquicia f = new Franquicia(2, "json");
+            Franquicia f = new Franquicia(2, "objetos");
             ArrayList<Coche> stock = new ArrayList<>();
             stock.add(new Coche("1", "r", "r"));
             stock.add(new Coche("2", "c", "c"));
@@ -41,7 +41,7 @@ public class TestFicherosConcesionarios {
             f.setAlquileresCoches(alquileres);
 
             GestorFicheros gf = new GestorFicheros();
-            gf.guardarFranquiciaJson(f);
+            gf.guardarFranquicia(f);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

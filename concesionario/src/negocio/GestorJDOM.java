@@ -5,8 +5,10 @@
  */
 package negocio;
 
+import concesionario.datos.Alquiler;
 import concesionario.datos.Coche;
 import concesionario.datos.Franquicia;
+import concesionario.datos.Vendido;
 import java.util.ArrayList;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -52,6 +54,14 @@ public class GestorJDOM {
     for (Coche c : f.getStockCoches()) {
       stock.addContent(crearCoche(c));
     }
+    Element ventas = new Element("vendidos");
+    for (Vendido v : f.getVentasCoches()) {
+      ventas.addContent(crearVendido(v));
+    }
+    Element alquiler = new Element("alquilados");
+    for (Alquiler a : f.getAlquileresCoches()) {
+      alquiler.addContent(crearAlquiler(a));
+    }
     franquicia.addContent(stock);
 
     return franquicia;
@@ -64,7 +74,18 @@ public class GestorJDOM {
     coche.addContent(new Element("modelo").setText(c.getModelo()));
     return coche;
   }
-
+  public Element crearVendido(Vendido v) {
+    Element vendido = new Element("vendido");
+    vendido.setAttribute("matricula", v.getMatricula());
+    vendido.setAttribute("precio", v.getPrecio()+"");
+    return vendido;
+  }
+  public Element crearAlquiler(Alquiler a) {
+    Element alquiler = new Element("alquiler");
+    alquiler.setAttribute("matricula", a.getMatricula());
+    alquiler.setAttribute("precio", a.getPrecio()+"");
+    return alquiler;
+  }
    public Coche crearCochedeElement(Element cCoche) {
     Coche coche = new Coche();
     coche.setMarca(cCoche.getChildText("marca"));

@@ -344,13 +344,32 @@ public class FrameConcesionario extends javax.swing.JFrame {
     return franquiciaElement;
   }
 
+  private void comprobacionesNuevaFranquicia(Franquicia nuevaFranquicia)
+  {
+    Element franquiciaElement = encuentraFranquicia(nuevaFranquicia);
+    //recorrer las matriculas y no añadir las que estuvieran
+    if (franquiciaElement!= null)
+    {
+    
+    }
+    //comprobar que las vendidad estan en stock
+    
+
+    
+    //comprobar que los alquileres existen.
+    
+    
+  }
+  
   private void meterFranquiciaJDOM(Franquicia f) {
     // encontrar la franquicia
     Element franquiciaElement = encuentraFranquicia(f);
+    comprobacionesNuevaFranquicia(f);
     GestorJDOM gestor = new GestorJDOM();
     if (franquiciaElement == null) {
       franquiciaElement = gestor.crearElementFranquicia(f);
     }
+    
     concesionario.getRootElement().getChild("franquicias").addContent(franquiciaElement);
   }
 private Franquicia cargarFranquiciaJDOM(Franquicia f){

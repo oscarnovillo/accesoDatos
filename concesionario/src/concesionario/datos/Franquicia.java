@@ -4,16 +4,19 @@
  */
 package concesionario.datos;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author profesor
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Franquicia {
+@XmlRootElement
+public class Franquicia implements Serializable{
     public int id;
     public String formato;
     public ArrayList<Coche> stockCoches;

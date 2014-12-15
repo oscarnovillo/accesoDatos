@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<franquicia>
+    <id>2</id>
+    <formato>jaxb</formato>
+    <stockCoches>
+        <matricula>21</matricula>
+        <marca>r</marca>
+        <modelo>r</modelo>
+    </stockCoches>
+    <stockCoches>
+        <matricula>22</matricula>
+        <marca>c</marca>
+        <modelo>c</modelo>
+    </stockCoches>
+    <stockCoches>
+        <matricula>22</matricula>
+        <marca>a</marca>
+        <modelo>a</modelo>
+    </stockCoches>
+    <ventasCoches>
+        <matricula>21</matricula>
+        <precio>10.0</precio>
+    </ventasCoches>
+    <alquileresCoches>
+        <matricula>22</matricula>
+        <precio>1.0</precio>
+    </alquileresCoches>
+</franquicia>

@@ -40,7 +40,22 @@ public class TestFicherosConcesionarios {
             f3.setVentasCoches(ventas3);
             f3.setAlquileresCoches(alquileres3);
             gf.guardarFranquicia(f3);
-          
+
+             Franquicia f2 = new Franquicia(2, "jaxb");
+            ArrayList<Coche> stock2 = new ArrayList<>();
+            stock2.add(new Coche("21", "r", "r"));
+            stock2.add(new Coche("22", "c", "c"));
+            stock2.add(new Coche("22", "a", "a"));
+            ArrayList<Vendido> ventas2 = new ArrayList<>();
+            ventas2.add(new Vendido("21", 10));
+            ArrayList<Alquiler> alquileres2 = new ArrayList<>();
+            alquileres2.add(new Alquiler("22", 1));
+            f2.setStockCoches(stock2);
+            f2.setVentasCoches(ventas2);
+            f2.setAlquileresCoches(alquileres2);
+            gf.guardarFranquicia(f2);
+            
+            
             Franquicia f6 = new Franquicia(6, "json");
             ArrayList<Coche> stock6 = new ArrayList<>();
             stock6.add(new Coche("61", "r", "r"));
@@ -55,7 +70,7 @@ public class TestFicherosConcesionarios {
             f6.setAlquileresCoches(alquileres6);
             gf.guardarFranquicia(f6);
           
-            Franquicia f5 = new Franquicia(2, "objetos");
+            Franquicia f5 = new Franquicia(5, "objetos");
             ArrayList<Coche> stock5 = new ArrayList<>();
             stock5.add(new Coche("51", "r", "r"));
             stock5.add(new Coche("52", "c", "c"));

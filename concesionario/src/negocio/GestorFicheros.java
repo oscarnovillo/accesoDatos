@@ -109,15 +109,15 @@ public class GestorFicheros {
                 franquicia = (Franquicia) aux;
             }
         } catch (EOFException ex) {
-//            System.out.println("Fin del fichero");
+             Logger.getLogger(GestorFicheros.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            // Logger.getLogger(FicherosDatos.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GestorFicheros.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 ois.close();
                 fich.close();
             } catch (IOException ex) {
-                //   Logger.getLogger(FicherosDatos.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GestorFicheros.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return franquicia;

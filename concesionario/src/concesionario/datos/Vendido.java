@@ -4,6 +4,7 @@
  */
 package concesionario.datos;
 
+import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
@@ -12,7 +13,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
  * @author profesor
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Vendido {
+public class Vendido implements Serializable {
     public String matricula;
     public double precio;
 

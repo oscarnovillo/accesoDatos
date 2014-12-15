@@ -4,6 +4,7 @@
  */
 package concesionario;
 
+import concesionario.datos.Coche;
 import negocio.GestorFicheros;
 import concesionario.datos.Franquicia;
 import java.io.File;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -30,6 +32,7 @@ import org.jdom2.xpath.XPathFactory;
 public class FrameConcesionario extends javax.swing.JFrame {
 
   Document concesionario = null;
+  String idFranquiciaSeleccionada = null;
   ArrayList<Franquicia> franquicias = null;
 
   public DefaultTableModel crearModeloStock() {
@@ -74,15 +77,13 @@ public class FrameConcesionario extends javax.swing.JFrame {
     }
   }
 
-  private void crearFormatoJDOM() {
-    concesionario = new Document(new Element("concesionario"));
-    Element totales = new Element("totales");
-    totales.addContent("stock");
-    totales.addContent("vendidos");
-    totales.addContent("facturados");
-    totales.addContent("totalfacturado");
-    concesionario.getRootElement().addContent(totales);
-    concesionario.getRootElement().addContent("franquicias");
+
+
+  public void vaciarTabla(JTable tabla) {
+    int filas = tabla.getRowCount();
+    for (int i = 0; i < filas; i++) {
+      ((DefaultTableModel) tabla.getModel()).removeRow(i);
+    }
   }
 
   /**
@@ -92,8 +93,8 @@ public class FrameConcesionario extends javax.swing.JFrame {
     initComponents();
     jTableStockFranquicia.setModel(crearModeloStock());
     cargarComboFranquicias();
-    crearFormatoJDOM();
-
+    GestorJDOM gd = new GestorJDOM();
+    concesionario = gd.crearFormatoJDOMVacio();
   }
 
   /**
@@ -112,7 +113,8 @@ public class FrameConcesionario extends javax.swing.JFrame {
     jButtonBorrarStock = new javax.swing.JButton();
     jScrollPane1 = new javax.swing.JScrollPane();
     jTableStockFranquicia = new javax.swing.JTable();
-    jButton1 = new javax.swing.JButton();
+    jButtonGuardarJDOM = new javax.swing.JButton();
+    jButtonCargarJDOM = new javax.swing.JButton();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -126,6 +128,11 @@ public class FrameConcesionario extends javax.swing.JFrame {
     });
 
     jButtonGuardarFranquicia.setText("GuardarFranquicia");
+    jButtonGuardarFranquicia.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonGuardarFranquiciaActionPerformed(evt);
+      }
+    });
 
     jButtonCargarStock.setText("cargar stock");
     jButtonCargarStock.addActionListener(new java.awt.event.ActionListener() {
@@ -135,6 +142,11 @@ public class FrameConcesionario extends javax.swing.JFrame {
     });
 
     jButtonBorrarStock.setText("borrar stock");
+    jButtonBorrarStock.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonBorrarStockActionPerformed(evt);
+      }
+    });
 
     jTableStockFranquicia.setModel(new javax.swing.table.DefaultTableModel(
       new Object [][] {
@@ -149,7 +161,19 @@ public class FrameConcesionario extends javax.swing.JFrame {
     ));
     jScrollPane1.setViewportView(jTableStockFranquicia);
 
-    jButton1.setText("Guardar JDOM");
+    jButtonGuardarJDOM.setText("Guardar JDOM");
+    jButtonGuardarJDOM.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonGuardarJDOMActionPerformed(evt);
+      }
+    });
+
+    jButtonCargarJDOM.setText("CargarJDOM");
+    jButtonCargarJDOM.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButtonCargarJDOMActionPerformed(evt);
+      }
+    });
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -172,7 +196,9 @@ public class FrameConcesionario extends javax.swing.JFrame {
           .addComponent(jButtonCargarFranquicia)
           .addComponent(jButtonGuardarFranquicia))
         .addGap(57, 57, 57)
-        .addComponent(jButton1)
+        .addComponent(jButtonGuardarJDOM)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(jButtonCargarJDOM)
         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
@@ -195,7 +221,9 @@ public class FrameConcesionario extends javax.swing.JFrame {
             .addComponent(jButtonGuardarFranquicia))
           .addGroup(layout.createSequentialGroup()
             .addGap(34, 34, 34)
-            .addComponent(jButton1)))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+              .addComponent(jButtonGuardarJDOM)
+              .addComponent(jButtonCargarJDOM))))
         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
@@ -230,29 +258,79 @@ public class FrameConcesionario extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCargarFranquiciaActionPerformed
 
   private void jButtonCargarStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargarStockActionPerformed
-    Franquicia seleccionada = (Franquicia)jComboBoxFranquicias.getSelectedItem();
-    if (seleccionada !=null)
-    {
+    Franquicia seleccionada = (Franquicia) jComboBoxFranquicias.getSelectedItem();
+     vaciarTabla(jTableStockFranquicia);
+    if (seleccionada != null) {
+      idFranquiciaSeleccionada = seleccionada.id+"";
       Element franquicia = encuentraFranquicia(seleccionada);
-      if (franquicia != null)
-      {
-        DefaultTableModel model = ((DefaultTableModel)jTableStockFranquicia.getModel());
-        
+      if (franquicia != null) {
+        DefaultTableModel model = ((DefaultTableModel) jTableStockFranquicia.getModel());
+       
         Element stock = franquicia.getChild("stock");
-        for (Element coche : stock.getChildren())
-        {
-          model.addRow(new Object[]{coche.getAttributeValue("id"),coche.getChildText("marca"),coche.getChildText("modelo") });
+        for (Element coche : stock.getChildren()) {
+          model.addRow(new Object[]{coche.getAttributeValue("matricula"), coche.getChildText("marca"), coche.getChildText("modelo")});
         }
-      }
-      else
-      {
+      } else {
         JOptionPane.showMessageDialog(this, "franquicia sin datos en JDOM");
       }
+    } else {
+      JOptionPane.showMessageDialog(this, "selecciona una franquicia");
     }
-    else {
+  }//GEN-LAST:event_jButtonCargarStockActionPerformed
+
+  private void jButtonBorrarStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarStockActionPerformed
+    String matriculaaBorrar = null;
+     DefaultTableModel model = ((DefaultTableModel) jTableStockFranquicia.getModel());
+    if (jTableStockFranquicia.getSelectedRow() >= 0)
+    {
+      matriculaaBorrar  = jTableStockFranquicia.getValueAt(jTableStockFranquicia.getSelectedRow(), 0).toString();
+      model.removeRow(jTableStockFranquicia.getSelectedRow());
+      Element coche = encuentraCoche(matriculaaBorrar, idFranquiciaSeleccionada);
+      if (coche != null)
+      {
+        coche.detach();
+      }
+    }else {
+      JOptionPane.showMessageDialog(this, "selecciona una fila a borrar");
+    }
+    
+    
+  }//GEN-LAST:event_jButtonBorrarStockActionPerformed
+
+  private void jButtonGuardarJDOMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarJDOMActionPerformed
+    GestorFicheros gf = new GestorFicheros();
+    gf.guardarJDOM(concesionario,"JDOM.xml");
+  }//GEN-LAST:event_jButtonGuardarJDOMActionPerformed
+
+  private void jButtonCargarJDOMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargarJDOMActionPerformed
+    // TODO add your handling code here:
+    GestorFicheros gf = new GestorFicheros();
+    concesionario = gf.cargarJDOM("JDOM.xml");
+  }//GEN-LAST:event_jButtonCargarJDOMActionPerformed
+
+  private void jButtonGuardarFranquiciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarFranquiciaActionPerformed
+    // ver el formato de la franquicia
+      Franquicia seleccion = (Franquicia) jComboBoxFranquicias.getSelectedItem();
+      Franquicia cargada = null;
+      if (seleccion != null) {
+        // cargar con ese formato 
+        GestorFicheros gf = new GestorFicheros();
+        cargada = cargarFranquiciaJDOM(seleccion);
+        gf.guardarFranquicia(cargada);
+        //meter en JDOM
+      } else {
         JOptionPane.showMessageDialog(this, "selecciona una franquicia");
       }
-  }//GEN-LAST:event_jButtonCargarStockActionPerformed
+  }//GEN-LAST:event_jButtonGuardarFranquiciaActionPerformed
+
+  private Element encuentraCoche(String matriculaCoche, String idFranquicia) {
+    Element cocheElement = null;
+    XPathFactory xFactory = XPathFactory.instance();
+    XPathExpression<Element> expr = xFactory.compile("//franquicia[@id='" + idFranquicia
+            + "']/stock/coche[@matricula='" + matriculaCoche + "']", Filters.element());
+    cocheElement = expr.evaluateFirst(concesionario);
+    return cocheElement;
+  }
 
   private Element encuentraFranquicia(Franquicia f) {
     Element franquiciaElement = null;
@@ -270,13 +348,23 @@ public class FrameConcesionario extends javax.swing.JFrame {
     // encontrar la franquicia
     Element franquiciaElement = encuentraFranquicia(f);
     GestorJDOM gestor = new GestorJDOM();
-    if (franquiciaElement == null)
-    {
+    if (franquiciaElement == null) {
       franquiciaElement = gestor.crearElementFranquicia(f);
     }
     concesionario.getRootElement().getChild("franquicias").addContent(franquiciaElement);
   }
-
+private Franquicia cargarFranquiciaJDOM(Franquicia f){
+    // encontrar la franquicia
+    Franquicia cargada = null;
+    Element franquiciaElement = encuentraFranquicia(f);
+    GestorJDOM gestor = new GestorJDOM();
+    if (franquiciaElement != null) {
+      cargada = gestor.crearFranquiciaDeElement(franquiciaElement);
+    }
+    
+    return cargada;
+  }
+  
   /**
    * @param args the command line arguments
    */
@@ -312,11 +400,12 @@ public class FrameConcesionario extends javax.swing.JFrame {
     });
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JButton jButton1;
   private javax.swing.JButton jButtonBorrarStock;
   private javax.swing.JButton jButtonCargarFranquicia;
+  private javax.swing.JButton jButtonCargarJDOM;
   private javax.swing.JButton jButtonCargarStock;
   private javax.swing.JButton jButtonGuardarFranquicia;
+  private javax.swing.JButton jButtonGuardarJDOM;
   private javax.swing.JComboBox jComboBoxFranquicias;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JTable jTableStockFranquicia;

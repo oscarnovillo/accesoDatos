@@ -10,14 +10,21 @@ import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
+import java.io.ObjectOutputStream;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 /**
  *
@@ -79,6 +86,75 @@ public class GestorFicheros {
         return franquicia;
     }
 
+   public void guardarFranquiciaJson(Franquicia franquicia) {
+        Gson gson = new Gson();
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(franquicia.getId()+".json");
+            gson.toJson(franquicia, fw);
+            fw.close();
+        } catch (IOException ex) {
+        }
+        
+    }
+    
+    public void guardarFranquiciaJaxb(Franquicia franquicia) {
+        
+        JAXBContext jc;
+        try {
+            jc = JAXBContext.newInstance(Franquicia.class);
+            Marshaller m = jc.createMarshaller();
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            m.marshal(franquicia, new File(franquicia.getId()+".jaxb"));
+        } catch (JAXBException ex) {
+
+        }
+        
+    }
+
+    public void guardarFranquiciaObjetos(Franquicia franquicia) {
+ 
+        File f = new File(franquicia.getId()+".dat");
+        FileOutputStream file = null;
+        try {
+            file = new FileOutputStream(f);
+            ObjectOutputStream object = new ObjectOutputStream(file);
+            object.writeObject(franquicia);
+            object.close();
+            file.close();
+        } catch (Exception ex) {
+        }
+       
+    }
+    
+    
+    public void guardarJDOM(Document document,String file)
+    {
+                XMLOutputter xmlOutput = new XMLOutputter();
+        xmlOutput.setFormat(Format.getPrettyFormat());
+        try {
+            xmlOutput.output(document, new FileWriter(
+                    file));
+        } catch (IOException ex) {
+            // Logger.getLogger(FicherosDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public Document cargarJDOM(String nombreFile)
+    {
+        Document document = null;
+        SAXBuilder saxBuilder = new SAXBuilder();
+        File file = new File(nombreFile);
+        
+        try {
+            document = saxBuilder.build(file);
+        } catch (JDOMException ex) {
+            // Logger.getLogger(FicherosDatos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            //Logger.getLogger(FicherosDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return document;
+    }
 
     
     

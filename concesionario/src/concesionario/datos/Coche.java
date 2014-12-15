@@ -4,13 +4,33 @@
  */
 package concesionario.datos;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
 /**
  *
  * @author profesor
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Coche {
+    
+    public String matricula;
     public String marca;
     public String modelo;
+
+    public Coche(String matricula, String marca, String modelo) {
+        this.matricula = matricula;
+        this.marca = marca;
+        this.modelo = modelo;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
 
     public Coche() {
     }

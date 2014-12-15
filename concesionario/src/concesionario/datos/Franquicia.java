@@ -5,11 +5,14 @@
 package concesionario.datos;
 
 import java.util.ArrayList;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
 /**
  *
  * @author profesor
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Franquicia {
     public int id;
     public String formato;

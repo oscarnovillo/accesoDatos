@@ -4,10 +4,14 @@
  */
 package concesionario.datos;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
 /**
  *
  * @author profesor
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Vendido {
     public String matricula;
     public double precio;

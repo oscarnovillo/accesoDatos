@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package bd;
+package negocio;
 
 import com.google.gson.Gson;
 import concesionario.datos.Franquicia;
@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
@@ -27,6 +28,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import util.Constantes;
 
 /**
  *
@@ -34,12 +36,47 @@ import org.jdom2.output.XMLOutputter;
  */
 public class GestorFicheros {
 
+  private String rutaCargados;
+  private String rutaGuardados;
+
+  public GestorFicheros() {
+    leerProperties();
+  }
+  
+  
+   private void leerProperties() {
+    FileReader file = null;
+    Properties p = null;
+    try {
+      p = new Properties();
+      file = new FileReader(Constantes.FICHERO_PROPERTIES);
+      p.load(file);
+      rutaCargados = p.getProperty(Constantes.RUTA_CARGADOS_PROPERTY);
+      rutaGuardados = p.getProperty(Constantes.RUTA_GUARDADOS_PROPERTY);
+    } catch (FileNotFoundException e) {
+      System.out.println("FileNotFound");
+    } catch (IOException e) {
+      System.out.println("IOEXCeption");
+    } finally {
+      if (file != null) {
+        try {
+          file.close();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      } else {
+      }
+    }
+  }
+  
+  
+  
     public Franquicia cargarFranquiciaJson(String file) {
         Gson gson = new Gson();
         FileReader fr = null;
         Franquicia franquicia = null;
         try {
-            fr = new FileReader(file);
+            fr = new FileReader(rutaCargados+"\\"+file+".json");
             franquicia = gson.fromJson(fr, Franquicia.class);
         } catch (FileNotFoundException ex) {
             //Logger.getLogger(GsonPropio.class.getName()).log(Level.SEVERE, null, ex);
@@ -53,7 +90,7 @@ public class GestorFicheros {
         try {
             jc = JAXBContext.newInstance(Franquicia.class);
             Unmarshaller u = jc.createUnmarshaller();
-            franquicia = (Franquicia) u.unmarshal(new File(file));
+            franquicia = (Franquicia) u.unmarshal(new File(rutaCargados+"\\"+file+".jaxb"));
         } catch (JAXBException ex) {
         }
         return franquicia;
@@ -65,7 +102,7 @@ public class GestorFicheros {
         ObjectInputStream ois = null;
         Franquicia franquicia = null;
         try {
-            fich = new FileInputStream(file);
+            fich = new FileInputStream(rutaCargados+"\\"+file+".dat");
             ois = new ObjectInputStream(fich);
             Object aux = ois.readObject();
             if (aux instanceof Franquicia) {
@@ -90,7 +127,7 @@ public class GestorFicheros {
         Gson gson = new Gson();
         FileWriter fw = null;
         try {
-            fw = new FileWriter(franquicia.getId() + ".json");
+            fw = new FileWriter(rutaGuardados+"\\"+franquicia.getId() + ".json");
             gson.toJson(franquicia, fw);
             fw.close();
         } catch (IOException ex) {
@@ -104,7 +141,7 @@ public class GestorFicheros {
             jc = JAXBContext.newInstance(Franquicia.class);
             Marshaller m = jc.createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            m.marshal(franquicia, new File(franquicia.getId() + ".jaxb"));
+            m.marshal(franquicia, new File(rutaGuardados+"\\"+franquicia.getId() + ".jaxb"));
         } catch (JAXBException ex) {
             Logger.getLogger(GestorFicheros.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -112,7 +149,7 @@ public class GestorFicheros {
 
     public void guardarFranquiciaObjetos(Franquicia franquicia) {
 
-        File f = new File(franquicia.getId() + ".dat");
+        File f = new File(rutaGuardados+"\\"+franquicia.getId() + ".dat");
         FileOutputStream file = null;
         try {
             file = new FileOutputStream(f);

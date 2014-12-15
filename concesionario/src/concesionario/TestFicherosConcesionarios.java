@@ -4,7 +4,7 @@
  */
 package concesionario;
 
-import bd.GestorFicheros;
+import negocio.GestorFicheros;
 import concesionario.datos.Alquiler;
 import concesionario.datos.Coche;
 import concesionario.datos.Franquicia;
@@ -29,13 +29,13 @@ public class TestFicherosConcesionarios {
             //    <franquicia id="6" formato="json"/>
             Franquicia f3 = new Franquicia(3, "json");
             ArrayList<Coche> stock3 = new ArrayList<>();
-            stock3.add(new Coche("1", "r", "r"));
-            stock3.add(new Coche("2", "c", "c"));
-            stock3.add(new Coche("3", "a", "a"));
+            stock3.add(new Coche("31", "r", "r"));
+            stock3.add(new Coche("32", "c", "c"));
+            stock3.add(new Coche("33", "a", "a"));
             ArrayList<Vendido> ventas3 = new ArrayList<>();
-            ventas3.add(new Vendido("1", 10));
+            ventas3.add(new Vendido("31", 10));
             ArrayList<Alquiler> alquileres3 = new ArrayList<>();
-            alquileres3.add(new Alquiler("2", 1));
+            alquileres3.add(new Alquiler("32", 1));
             f3.setStockCoches(stock3);
             f3.setVentasCoches(ventas3);
             f3.setAlquileresCoches(alquileres3);
@@ -43,13 +43,13 @@ public class TestFicherosConcesionarios {
           
             Franquicia f6 = new Franquicia(6, "json");
             ArrayList<Coche> stock6 = new ArrayList<>();
-            stock6.add(new Coche("1", "r", "r"));
-            stock6.add(new Coche("2", "c", "c"));
-            stock6.add(new Coche("6", "a", "a"));
+            stock6.add(new Coche("61", "r", "r"));
+            stock6.add(new Coche("62", "c", "c"));
+            stock6.add(new Coche("66", "a", "a"));
             ArrayList<Vendido> ventas6 = new ArrayList<>();
-            ventas6.add(new Vendido("1", 10));
+            ventas6.add(new Vendido("61", 10));
             ArrayList<Alquiler> alquileres6 = new ArrayList<>();
-            alquileres6.add(new Alquiler("2", 1));
+            alquileres6.add(new Alquiler("62", 1));
             f6.setStockCoches(stock6);
             f6.setVentasCoches(ventas6);
             f6.setAlquileresCoches(alquileres6);
@@ -57,13 +57,13 @@ public class TestFicherosConcesionarios {
           
             Franquicia f5 = new Franquicia(2, "objetos");
             ArrayList<Coche> stock5 = new ArrayList<>();
-            stock5.add(new Coche("1", "r", "r"));
-            stock5.add(new Coche("2", "c", "c"));
-            stock5.add(new Coche("3", "a", "a"));
+            stock5.add(new Coche("51", "r", "r"));
+            stock5.add(new Coche("52", "c", "c"));
+            stock5.add(new Coche("53", "a", "a"));
             ArrayList<Vendido> ventas5 = new ArrayList<>();
-            ventas5.add(new Vendido("1", 10));
+            ventas5.add(new Vendido("51", 10));
             ArrayList<Alquiler> alquileres5 = new ArrayList<>();
-            alquileres5.add(new Alquiler("2", 1));
+            alquileres5.add(new Alquiler("52", 1));
             f5.setStockCoches(stock5);
             f5.setVentasCoches(ventas5);
             f5.setAlquileresCoches(alquileres5);

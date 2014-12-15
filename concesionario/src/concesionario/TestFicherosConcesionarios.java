@@ -21,27 +21,53 @@ import javax.xml.bind.JAXBException;
 public class TestFicherosConcesionarios {
 
     public static void main(String[] args) {
-        try {
-            //            <franquicia id="2" formato="jaxb"/>
+            GestorFicheros gf = new GestorFicheros();
+      try {
+            //    <franquicia id="2" formato="jaxb"/>
             //    <franquicia id="3" formato="json"/>
             //    <franquicia id="5" formato="objetos"/>
             //    <franquicia id="6" formato="json"/>
-
-            Franquicia f = new Franquicia(2, "objetos");
-            ArrayList<Coche> stock = new ArrayList<>();
-            stock.add(new Coche("1", "r", "r"));
-            stock.add(new Coche("2", "c", "c"));
-            stock.add(new Coche("3", "a", "a"));
-            ArrayList<Vendido> ventas = new ArrayList<>();
-            ventas.add(new Vendido("1", 10));
-            ArrayList<Alquiler> alquileres = new ArrayList<>();
-            alquileres.add(new Alquiler("2", 1));
-            f.setStockCoches(stock);
-            f.setVentasCoches(ventas);
-            f.setAlquileresCoches(alquileres);
-
-            GestorFicheros gf = new GestorFicheros();
-            gf.guardarFranquicia(f);
+            Franquicia f3 = new Franquicia(3, "json");
+            ArrayList<Coche> stock3 = new ArrayList<>();
+            stock3.add(new Coche("1", "r", "r"));
+            stock3.add(new Coche("2", "c", "c"));
+            stock3.add(new Coche("3", "a", "a"));
+            ArrayList<Vendido> ventas3 = new ArrayList<>();
+            ventas3.add(new Vendido("1", 10));
+            ArrayList<Alquiler> alquileres3 = new ArrayList<>();
+            alquileres3.add(new Alquiler("2", 1));
+            f3.setStockCoches(stock3);
+            f3.setVentasCoches(ventas3);
+            f3.setAlquileresCoches(alquileres3);
+            gf.guardarFranquicia(f3);
+          
+            Franquicia f6 = new Franquicia(6, "json");
+            ArrayList<Coche> stock6 = new ArrayList<>();
+            stock6.add(new Coche("1", "r", "r"));
+            stock6.add(new Coche("2", "c", "c"));
+            stock6.add(new Coche("6", "a", "a"));
+            ArrayList<Vendido> ventas6 = new ArrayList<>();
+            ventas6.add(new Vendido("1", 10));
+            ArrayList<Alquiler> alquileres6 = new ArrayList<>();
+            alquileres6.add(new Alquiler("2", 1));
+            f6.setStockCoches(stock6);
+            f6.setVentasCoches(ventas6);
+            f6.setAlquileresCoches(alquileres6);
+            gf.guardarFranquicia(f6);
+          
+            Franquicia f5 = new Franquicia(2, "objetos");
+            ArrayList<Coche> stock5 = new ArrayList<>();
+            stock5.add(new Coche("1", "r", "r"));
+            stock5.add(new Coche("2", "c", "c"));
+            stock5.add(new Coche("3", "a", "a"));
+            ArrayList<Vendido> ventas5 = new ArrayList<>();
+            ventas5.add(new Vendido("1", 10));
+            ArrayList<Alquiler> alquileres5 = new ArrayList<>();
+            alquileres5.add(new Alquiler("2", 1));
+            f5.setStockCoches(stock5);
+            f5.setVentasCoches(ventas5);
+            f5.setAlquileresCoches(alquileres5);
+            gf.guardarFranquicia(f5);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

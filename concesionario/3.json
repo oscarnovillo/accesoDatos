@@ -1,0 +1,1 @@
+{"id":3,"formato":"json","stockCoches":[{"matricula":"1","marca":"r","modelo":"r"},{"matricula":"2","marca":"c","modelo":"c"},{"matricula":"3","marca":"a","modelo":"a"}],"ventasCoches":[{"matricula":"1","precio":10.0}],"alquileresCoches":[{"matricula":"2","precio":1.0}]}

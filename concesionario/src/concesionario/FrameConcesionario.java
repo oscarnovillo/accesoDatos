@@ -4,17 +4,76 @@
  */
 package concesionario;
 
+import bd.GestorFicheros;
+import concesionario.datos.Franquicia;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+
 /**
  *
  * @author profesor
  */
 public class FrameConcesionario extends javax.swing.JFrame {
 
+    Document concesionario = null;
+    ArrayList<Franquicia> franquicias = null;
+
+    private void cargarComboFranquicias() {
+        File f = new File("./formatos.xml");
+
+        SAXBuilder saxBuilder = new SAXBuilder();
+
+        if (f.exists()) {
+
+            Document document = null;
+            try {
+                document = saxBuilder.build(f);
+                Element rootNode = document.getRootElement();
+                List<Element> frList = rootNode.getChildren("franquicia");
+                for (Element franquiciaElement : frList) {
+                    Franquicia franquicia = new Franquicia(Integer.parseInt(franquiciaElement.getAttributeValue("id")),
+                            franquiciaElement.getAttributeValue("formato"));
+                    franquicias.add(franquicia);
+                    jComboBoxFranquicias.addItem(franquicia);
+                }
+            } catch (JDOMException ex) {
+                //Logger.getLogger(FicherosDatos.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                //Logger.getLogger(FicherosDatos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void crearFormatoJDOM()
+    {
+        concesionario =  new Document(new Element("concesionario"));
+        Element totales = new Element("totales");
+        totales.addContent("stock");
+        totales.addContent("vendidos");
+        totales.addContent("facturados");
+        totales.addContent("totalfacturado");
+        concesionario.getRootElement().addContent(totales);
+        concesionario.getRootElement().addContent("franquicias");
+        
+    }
+    
     /**
      * Creates new form FrameConcesionario
      */
     public FrameConcesionario() {
         initComponents();
+        cargarComboFranquicias();
+        crearFormatoJDOM();
+                
+        
+        
     }
 
     /**
@@ -40,6 +99,11 @@ public class FrameConcesionario extends javax.swing.JFrame {
         jComboBoxFranquicias.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jButtonCargarFranquicia.setText("Cargar Franquicia");
+        jButtonCargarFranquicia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCargarFranquiciaActionPerformed(evt);
+            }
+        });
 
         jButtonGuardarFranquicia.setText("GuardarFranquicia");
 
@@ -113,6 +177,40 @@ public class FrameConcesionario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonCargarFranquiciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargarFranquiciaActionPerformed
+
+        // ver el formato de la franquicia
+        Franquicia seleccion = (Franquicia) jComboBoxFranquicias.getSelectedItem();
+        Franquicia cargada = null;
+        if (seleccion != null) {
+            // cargar con ese formato 
+            String formato = seleccion.getFormato();
+            GestorFicheros gf = new GestorFicheros();
+            switch (formato) {
+                case "json":
+                    cargada = gf.cargarFranquiciaJson(""+seleccion.getId());
+                    break;
+                case "jaxb":
+                    cargada = gf.cargarFranquiciaJaxb(""+seleccion.getId());
+                    break;
+                case "objetos":
+                    cargada = gf.cargarFranquiciaObjetos(""+seleccion.getId());
+                    break;
+            }
+            //meter en JDOM
+        } else {
+            JOptionPane.showMessageDialog(this, "selecciona una franquicia");
+        }
+    }//GEN-LAST:event_jButtonCargarFranquiciaActionPerformed
+
+    private void meterFranquiciaJDOM(Franquicia f)
+    {
+        // encontrar la franquicia
+        
+        
+        
+    }
+    
     /**
      * @param args the command line arguments
      */

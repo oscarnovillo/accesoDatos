@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<formatos>
+    <franquicia id="2" formato="jaxb"/>
+    <franquicia id="3" formato="json"/>
+    <franquicia id="5" formato="objetos"/>
+    <franquicia id="6" formato="json"/>
+</formatos>

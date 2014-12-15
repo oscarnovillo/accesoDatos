@@ -65,6 +65,11 @@ public class Franquicia {
     public void setAlquileresCoches(ArrayList<Alquiler> alquileresCoches) {
         this.alquileresCoches = alquileresCoches;
     }
+
+    @Override
+    public String toString() {
+        return "Franquicia{" + "id=" + id + ", formato=" + formato + '}';
+    }
     
     
     

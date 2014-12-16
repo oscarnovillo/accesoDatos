@@ -37,6 +37,7 @@ public class FrameConcesionario extends javax.swing.JFrame {
   String idFranquiciaSeleccionada = null;
   ArrayList<Franquicia> franquicias = null;
 
+  // <editor-fold defaultstate="collapsed" desc="incializaciones">    
   public DefaultTableModel crearModeloStock() {
     DefaultTableModel model = new DefaultTableModel() {
 
@@ -85,7 +86,7 @@ public class FrameConcesionario extends javax.swing.JFrame {
       ((DefaultTableModel) tabla.getModel()).removeRow(i);
     }
   }
-
+// </editor-fold>                        
   /**
    * Creates new form FrameConcesionario
    */
@@ -291,6 +292,8 @@ public class FrameConcesionario extends javax.swing.JFrame {
     pack();
   }// </editor-fold>//GEN-END:initComponents
 
+
+// <editor-fold defaultstate="collapsed" desc="click botones">    
     private void jButtonCargarFranquiciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargarFranquiciaActionPerformed
 
       // ver el formato de la franquicia
@@ -381,6 +384,7 @@ public class FrameConcesionario extends javax.swing.JFrame {
       JOptionPane.showMessageDialog(this, "selecciona una franquicia");
     }
   }//GEN-LAST:event_jButtonGuardarFranquiciaActionPerformed
+// </editor-fold>                        
 
   private Element encuentraCoche(String matriculaCoche, String idFranquicia) {
     Element cocheElement = null;

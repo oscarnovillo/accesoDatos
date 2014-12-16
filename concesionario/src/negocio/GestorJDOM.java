@@ -24,19 +24,19 @@ public class GestorJDOM {
     Element totales = new Element("totales");
     totales.addContent(new Element("stock").setText("0"));
     totales.addContent(new Element("vendidos").setText("0"));
-    totales.addContent(new Element("facturados").setText("0"));
+    totales.addContent(new Element("alquilados").setText("0"));
     totales.addContent(new Element("totalfacturado").setText("0"));
     concesionario.getRootElement().addContent(totales);
     concesionario.getRootElement().addContent(new Element("franquicias"));
     return concesionario;
   }
 
-    public Franquicia crearFranquiciaDeElement(Element f) {
+  public Franquicia crearFranquiciaDeElement(Element f) {
     Franquicia franquicia = new Franquicia();
-    
+
     franquicia.setId(Integer.parseInt(f.getAttributeValue("id")));
     franquicia.setFormato(f.getAttributeValue("formato"));
-    ArrayList<Coche> stock =  new ArrayList<>();
+    ArrayList<Coche> stock = new ArrayList<>();
     Element eStock = f.getChild("stock");
     for (Element eCoche : eStock.getChildren()) {
       stock.add(crearCochedeElement(eCoche));
@@ -45,10 +45,27 @@ public class GestorJDOM {
 
     return franquicia;
   }
-  
+
+  public void addElementFranquicia(Element franquicia, Franquicia f) {
+
+    Element stock = franquicia.getChild("stock");
+    for (Coche c : f.getStockCoches()) {
+      stock.addContent(crearCoche(c));
+    }
+    Element ventas = franquicia.getChild("vendidos");
+    for (Vendido v : f.getVentasCoches()) {
+      ventas.addContent(crearVendido(v));
+    }
+    Element alquiler = franquicia.getChild("alquilados");
+    for (Alquiler a : f.getAlquileresCoches()) {
+      alquiler.addContent(crearAlquiler(a));
+    }
+
+  }
+
   public Element crearElementFranquicia(Franquicia f) {
     Element franquicia = new Element("franquicia");
-    franquicia.setAttribute("id",""+f.getId());
+    franquicia.setAttribute("id", "" + f.getId());
     franquicia.setAttribute("formato", f.getFormato());
     Element stock = new Element("stock");
     for (Coche c : f.getStockCoches()) {
@@ -63,7 +80,8 @@ public class GestorJDOM {
       alquiler.addContent(crearAlquiler(a));
     }
     franquicia.addContent(stock);
-
+    franquicia.addContent(ventas);
+    franquicia.addContent(alquiler);
     return franquicia;
   }
 
@@ -74,19 +92,22 @@ public class GestorJDOM {
     coche.addContent(new Element("modelo").setText(c.getModelo()));
     return coche;
   }
+
   public Element crearVendido(Vendido v) {
     Element vendido = new Element("vendido");
     vendido.setAttribute("matricula", v.getMatricula());
-    vendido.setAttribute("precio", v.getPrecio()+"");
+    vendido.setAttribute("precio", v.getPrecio() + "");
     return vendido;
   }
+
   public Element crearAlquiler(Alquiler a) {
     Element alquiler = new Element("alquiler");
     alquiler.setAttribute("matricula", a.getMatricula());
-    alquiler.setAttribute("precio", a.getPrecio()+"");
+    alquiler.setAttribute("precio", a.getPrecio() + "");
     return alquiler;
   }
-   public Coche crearCochedeElement(Element cCoche) {
+
+  public Coche crearCochedeElement(Element cCoche) {
     Coche coche = new Coche();
     coche.setMarca(cCoche.getChildText("marca"));
     coche.setModelo(cCoche.getChildText("modelo"));

@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <concesionario>
-  <totales>stockvendidosfacturadostotalfacturado</totales>
+  <totales>
+    <stock>0</stock>
+    <vendidos>0</vendidos>
+    <facturados>0</facturados>
+    <totalfacturado>0</totalfacturado>
+  </totales>
   <franquicias>
-    <franquicia id="2">
+    <franquicia id="2" formato="jaxb">
       <stock>
         <coche matricula="21">
           <marca>r</marca>
@@ -18,15 +23,11 @@
         </coche>
       </stock>
     </franquicia>
-    <franquicia id="3">
+    <franquicia id="3" formato="json">
       <stock>
         <coche matricula="31">
           <marca>r</marca>
           <modelo>r</modelo>
-        </coche>
-        <coche matricula="32">
-          <marca>c</marca>
-          <modelo>c</modelo>
         </coche>
         <coche matricula="33">
           <marca>a</marca>
@@ -34,23 +35,7 @@
         </coche>
       </stock>
     </franquicia>
-    <franquicia id="5">
-      <stock>
-        <coche matricula="51">
-          <marca>r</marca>
-          <modelo>r</modelo>
-        </coche>
-        <coche matricula="52">
-          <marca>c</marca>
-          <modelo>c</modelo>
-        </coche>
-        <coche matricula="53">
-          <marca>a</marca>
-          <modelo>a</modelo>
-        </coche>
-      </stock>
-    </franquicia>
-    <franquicia id="6">
+    <franquicia id="6" formato="json">
       <stock>
         <coche matricula="61">
           <marca>r</marca>

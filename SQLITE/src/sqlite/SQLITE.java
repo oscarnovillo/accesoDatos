@@ -4,6 +4,11 @@
  */
 package sqlite;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import sqlite.bd.GestorBD;
 
 /**
@@ -17,9 +22,23 @@ public class SQLITE {
      */
     public static void main(String[] args) {
         GestorBD gestor =new GestorBD();
-        gestor.connect();
-        gestor.saveCliente();
-        gestor.close();
+        Connection connection = null;
+        try
+        {
+        //gestor.connect();
+        connection = DriverManager.getConnection("jdbc:sqlite:./bd/practica");
+        gestor.saveCliente(connection);
+        gestor.mostrarClientes();
+        }
+        catch(Exception e){}
+        finally{
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(SQLITE.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       
+        }
     }
     
     

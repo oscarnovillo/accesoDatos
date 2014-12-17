@@ -68,11 +68,13 @@ public class GestorBD {
         }
     }
     
-     public void saveCliente(){
+     public void saveCliente(Connection connect){
         try {
-            PreparedStatement st = connect.prepareStatement("insert into clientes (nombre) values (?)");
-            st.setString(1, "nombre");
-            st.executeUpdate();
+         
+            PreparedStatement st = connect.prepareStatement(
+                    "insert into clientes (nombre) values (?)");
+            st.setString(1, "paco");
+            int filas= st.executeUpdate();
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
         }
@@ -82,7 +84,8 @@ public class GestorBD {
       public void mostrarClientes(){
         ResultSet result = null;
         try {
-            PreparedStatement st = connect.prepareStatement("select * from clientes");
+            PreparedStatement st = connect.prepareStatement(
+                    "select * from clientes");
             result = st.executeQuery();
 
             while (result.next()) {

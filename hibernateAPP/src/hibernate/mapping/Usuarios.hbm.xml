@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 30-dic-2014 1:01:00 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="hibernate" name="hibernate.mapping.Usuarios" optimistic-lock="version" table="usuarios">
+    <id name="login" type="string">
+      <column length="50" name="LOGIN"/>
+      <generator class="assigned"/>
+    </id>
+    <many-to-one class="hibernate.mapping.TiposUsuarios" fetch="select" name="tiposUsuarios">
+      <column name="TIPO_USUARIO" not-null="true"/>
+    </many-to-one>
+    <property name="password" type="string">
+      <column length="100" name="PASSWORD" not-null="true"/>
+    </property>
+    <one-to-one class="hibernate.mapping.DatosPersonales" name="datosPersonales"/>
+    <set fetch="select" inverse="true" lazy="true" name="pedidosesForUsuario" table="pedidos">
+      <key>
+        <column length="50" name="USUARIO" not-null="true"/>
+      </key>
+      <one-to-many class="hibernate.mapping.Pedidos"/>
+    </set>
+    <set fetch="select" inverse="true" lazy="true" name="pedidosesForDistribuidora" table="pedidos">
+      <key>
+        <column length="50" name="DISTRIBUIDORA" not-null="true"/>
+      </key>
+      <one-to-many class="hibernate.mapping.Pedidos"/>
+    </set>
+    <one-to-one class="hibernate.mapping.ComisionesTotales" name="comisionesTotales"/>
+    <one-to-one class="hibernate.mapping.DatosDirecciones" name="datosDirecciones"/>
+    <set fetch="select" inverse="true" lazy="true" name="pedidosesForJefaGrupo" table="pedidos">
+      <key>
+        <column length="50" name="JEFA_GRUPO" not-null="true"/>
+      </key>
+      <one-to-many class="hibernate.mapping.Pedidos"/>
+    </set>
+  </class>
+</hibernate-mapping>

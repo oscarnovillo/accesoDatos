@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 30-dic-2014 1:01:00 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="hibernate" name="hibernate.mapping.DatosPersonales" optimistic-lock="version" table="datos_personales">
+    <id name="login" type="string">
+      <column length="50" name="LOGIN"/>
+      <generator class="foreign">
+        <param name="property">usuarios</param>
+      </generator>
+    </id>
+    <one-to-one class="hibernate.mapping.Usuarios" constrained="true" name="usuarios"/>
+    <property name="nombre" type="string">
+      <column length="100" name="NOMBRE"/>
+    </property>
+    <property name="apellidos" type="string">
+      <column length="250" name="APELLIDOS"/>
+    </property>
+    <property name="email" type="string">
+      <column length="100" name="EMAIL"/>
+    </property>
+  </class>
+</hibernate-mapping>

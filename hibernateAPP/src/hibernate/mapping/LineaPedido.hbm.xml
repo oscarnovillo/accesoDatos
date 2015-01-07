@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 30-dic-2014 1:01:00 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="hibernate.mapping.LineaPedido" table="linea_pedido" catalog="hibernate" optimistic-lock="version">
+        <id name="idLineaPedido" type="java.lang.Integer">
+            <column name="ID_LINEA_PEDIDO" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="pedidos" class="hibernate.mapping.Pedidos" fetch="select">
+            <column name="ID_PEDIDO" not-null="true" />
+        </many-to-one>
+        <many-to-one name="productos" class="hibernate.mapping.Productos" fetch="select">
+            <column name="CODIGO_PRODUCTO" length="25" not-null="true" />
+        </many-to-one>
+        <property name="cantidad" type="int">
+            <column name="CANTIDAD" not-null="true" />
+        </property>
+        <property name="precioLinea" type="long">
+            <column name="PRECIO_LINEA" precision="10" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

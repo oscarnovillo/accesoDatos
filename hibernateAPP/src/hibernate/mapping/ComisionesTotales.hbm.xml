@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 30-dic-2014 1:01:00 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="hibernate" name="hibernate.mapping.ComisionesTotales" optimistic-lock="version" table="comisiones_totales">
+    <id name="login" type="string">
+      <column length="50" name="LOGIN"/>
+      <generator class="foreign">
+        <param name="property">usuarios</param>
+      </generator>
+    </id>
+    <one-to-one class="hibernate.mapping.Usuarios" constrained="true" name="usuarios"/>
+    <property name="comisiones" type="long">
+      <column name="COMISIONES" not-null="true" precision="10" scale="0"/>
+    </property>
+    <property name="fechaComprobacion" type="timestamp">
+      <column length="19" name="FECHA_COMPROBACION"/>
+    </property>
+  </class>
+</hibernate-mapping>

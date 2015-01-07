@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 30-dic-2014 1:01:00 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="hibernate.mapping.TiposComision" table="tipos_comision" catalog="hibernate" optimistic-lock="version">
+        <id name="idTipoComision" type="int">
+            <column name="ID_TIPO_COMISION" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="tiposUsuarios" class="hibernate.mapping.TiposUsuarios" fetch="select">
+            <column name="ID_TIPO_USUARIO" not-null="true" />
+        </many-to-one>
+        <property name="porcentaje" type="long">
+            <column name="PORCENTAJE" precision="10" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 30-dic-2014 1:01:00 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="hibernate.mapping.Productos" table="productos" catalog="hibernate" optimistic-lock="version">
+        <id name="codigo" type="string">
+            <column name="CODIGO" length="25" />
+            <generator class="assigned" />
+        </id>
+        <property name="nombre" type="string">
+            <column name="NOMBRE" length="45" not-null="true" />
+        </property>
+        <property name="precio" type="double">
+            <column name="PRECIO" precision="22" scale="0" not-null="true" />
+        </property>
+        <property name="fechaFin" type="timestamp">
+            <column name="FECHA_FIN" length="19" />
+        </property>
+        <set name="pedidoses" table="pedidos" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CODIGO_PRODUCTO" length="25" not-null="true" />
+            </key>
+            <one-to-many class="hibernate.mapping.Pedidos" />
+        </set>
+        <set name="lineaPedidos" table="linea_pedido" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CODIGO_PRODUCTO" length="25" not-null="true" />
+            </key>
+            <one-to-many class="hibernate.mapping.LineaPedido" />
+        </set>
+    </class>
+</hibernate-mapping>

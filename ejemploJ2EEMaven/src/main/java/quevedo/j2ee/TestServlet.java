@@ -47,7 +47,8 @@ public class TestServlet extends HttpServlet {
       out.println("<h1>Servlet TestServlet at " + request.getContextPath() + "</h1>");
       for (String s : request.getParameterMap().keySet())
       {
-        session.setAttribute(s,  request.getParameterMap().get(s)[0]);
+
+        session.setAttribute(s,  request.getParameterMap().get(s)[0]+session.getAttribute(s));
         out.println("<h1>Servlet TestServlet at " + s+" "+ request.getParameterMap().get(s)[0] + "</h1>");
       }
       response.addHeader("token","9999999");

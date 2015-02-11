@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
@@ -35,8 +36,18 @@ public class TestServlet2 extends HttpServlet {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
     response.setContentType("application/json");
-    Test test= new Test();
-    test.setNum(10);
+    
+     HttpSession session = request.getSession();
+    if (session ==null) 
+      session = request.getSession(true);
+    
+    Test test= (Test)session.getAttribute("test");
+    if (session.getAttribute("test")==null)
+    {
+     test= new Test();
+      session.setAttribute("test", test);
+    }
+    test.setNum(test.getNum()+1);
         // 1. get received JSON data from request
         BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
         String json = "";
@@ -57,6 +68,7 @@ public class TestServlet2 extends HttpServlet {
         //articles.add(article);
  
         // 6. Send List<Article> as JSON to client
+        response.addHeader("json", "1");
         mapper.writeValue(response.getOutputStream(), test);
     
   }

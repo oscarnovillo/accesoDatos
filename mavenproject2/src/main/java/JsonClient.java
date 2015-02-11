@@ -27,7 +27,7 @@ public class JsonClient {
 //        .execute();
       
       response = Jsoup.connect("http://localhost:8080/ejemploJ2EEMaven/TestServlet2")
-              // .cookies(response.cookies())
+               //.cookies(response.cookies())
               .method(Connection.Method.POST)
               .ignoreContentType(true)
               .execute();
@@ -38,8 +38,21 @@ public class JsonClient {
  
         // 3. Convert received JSON to Article
         Test test = mapper.readValue(json, Test.class);
+        System.out.println(test.getNum());
+      response = Jsoup.connect("http://localhost:8080/ejemploJ2EEMaven/TestServlet2")
+             .header("json",response.header("json"))
+              .method(Connection.Method.POST)
+              .ignoreContentType(true)
+              .execute();
+      
+ json = response.body();
+      // 2. initiate jackson mapper
+         mapper = new ObjectMapper();
  
-      System.out.println(test.getNum());
+        // 3. Convert received JSON to Article
+         test = mapper.readValue(json, Test.class);
+      
+        System.out.println(test.getNum());
     } catch (IOException ex) {
       Logger.getLogger(JsonClient.class.getName()).log(Level.SEVERE, null, ex);
     }

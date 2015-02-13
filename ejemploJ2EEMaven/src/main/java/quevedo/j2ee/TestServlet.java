@@ -7,6 +7,7 @@ package quevedo.j2ee;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +35,9 @@ public class TestServlet extends HttpServlet {
     HttpSession session = request.getSession();
     if (session ==null) 
       session = request.getSession(true);
+    
+    
+    request.getRequestDispatcher("newjsp.jsp").forward(request, response);
     
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {

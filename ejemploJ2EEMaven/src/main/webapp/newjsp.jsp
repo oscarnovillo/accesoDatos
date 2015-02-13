@@ -12,6 +12,13 @@
     <title>JSP Page</title>
   </head>
   <body>
+    
+    <%
+     
+    
+    %>
+      
+      
     <c:if test="true">
       <h1>Hello World!</h1>
     

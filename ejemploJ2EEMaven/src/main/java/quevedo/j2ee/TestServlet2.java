@@ -5,6 +5,7 @@
  */
 package quevedo.j2ee;
 
+import quevedo.library.Test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -48,6 +49,7 @@ public class TestServlet2 extends HttpServlet {
       session.setAttribute("test", test);
     }
     test.setNum(test.getNum()+1);
+    test.setNombre("test");
         // 1. get received JSON data from request
         BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
         String json = "";

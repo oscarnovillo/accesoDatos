@@ -12,6 +12,14 @@ package quevedo.library;
  * @author oscar
  */
 public class Test {
+
+  public Test() {
+  }
+
+  public Test(int num, String nombre) {
+    this.num = num;
+    this.nombre = nombre;
+  }
   
   private int num;
   private String nombre;

@@ -12,18 +12,21 @@
     <title>JSP Page</title>
   </head>
   <body>
-    
     <%
-     
-    
-    %>
+      out.print(request.getAttribute("tests"));
       
-      
-    <c:if test="true">
-      <h1>Hello World!</h1>
+      %>
     
-    </c:if>
-
+    <c:set var="t" value="${tests}" />
+    <table>
+      <c:forEach var="test" items='${t}'>
+        <tr>
+          <td><c:out value="${test.num}"/> </td>
+          <td><c:out value="${test.nombre}"/> </td>
+        </tr>
+      </c:forEach>
+      
+    </table>
     <h1>Hello World2!</h1>
   </body>
 </html>

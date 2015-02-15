@@ -1,8 +1,11 @@
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import quevedo.library.Test;
@@ -27,8 +30,9 @@ public class JsonClient {
 //        .method(Connection.Method.GET)
 //        .execute();
       
-      response = Jsoup.connect("http://localhost:8080/ejemploJ2EEMaven/TestServlet2")
+      response = Jsoup.connect("http://localhost:8080/ejemploJ2EEMaven/TestServlet")
                //.cookies(response.cookies())
+              .data("json","true")
               .method(Connection.Method.POST)
               .ignoreContentType(true)
               .execute();
@@ -38,22 +42,10 @@ public class JsonClient {
         ObjectMapper mapper = new ObjectMapper();
  
         // 3. Convert received JSON to Article
-        Test test = mapper.readValue(json, Test.class);
-        System.out.println(test.getNum());
-      response = Jsoup.connect("http://localhost:8080/ejemploJ2EEMaven/TestServlet2")
-             .header("json",response.header("json"))
-              .method(Connection.Method.POST)
-              .ignoreContentType(true)
-              .execute();
+        ArrayList<Test> tests = mapper.readValue(json,  new TypeReference<ArrayList<Test>>(){ });
       
- json = response.body();
-      // 2. initiate jackson mapper
-         mapper = new ObjectMapper();
- 
-        // 3. Convert received JSON to Article
-         test = mapper.readValue(json, Test.class);
-      
-        System.out.println(test.getNum());
+        for(Test test : tests)
+          System.out.println(test.getNum());
     } catch (IOException ex) {
       Logger.getLogger(JsonClient.class.getName()).log(Level.SEVERE, null, ex);
     }

@@ -1,7 +1,9 @@
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -30,22 +32,33 @@ public class JsonClient {
 //        .method(Connection.Method.GET)
 //        .execute();
       
-      response = Jsoup.connect("http://localhost:8080/ejemploJ2EEMaven/TestServlet")
+      response = Jsoup.connect("http://10.1.214.100:8080/SessionServlet")
                //.cookies(response.cookies())
-              .data("json","true")
+              //.data("json","true")
               .method(Connection.Method.POST)
               .ignoreContentType(true)
               .execute();
       
-      String json = response.body();
-      // 2. initiate jackson mapper
-        ObjectMapper mapper = new ObjectMapper();
- 
-        // 3. Convert received JSON to Article
-        ArrayList<Test> tests = mapper.readValue(json,  new TypeReference<ArrayList<Test>>(){ });
+      Object m = response.cookies();
       
-        for(Test test : tests)
-          System.out.println(test.getNum());
+        System.out.println(response.body());
+              response = Jsoup.connect("http://10.1.214.100:8080/SessionServlet")
+              .cookies((Map)m)
+              //.data("json","true")
+              .method(Connection.Method.POST)
+              .ignoreContentType(true)
+              .execute();
+      
+        System.out.println(response.body());
+//      String json = response.body();
+//      // 2. initiate jackson mapper
+//        ObjectMapper mapper = new ObjectMapper();
+// 
+//        // 3. Convert received JSON to Article
+//        ArrayList<Test> tests = mapper.readValue(json,  new TypeReference<ArrayList<Test>>(){ });
+//      
+//        for(Test test : tests)
+//          System.out.println(test.getNum());
     } catch (IOException ex) {
       Logger.getLogger(JsonClient.class.getName()).log(Level.SEVERE, null, ex);
     }

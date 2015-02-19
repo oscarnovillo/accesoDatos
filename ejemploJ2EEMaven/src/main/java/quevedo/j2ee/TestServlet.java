@@ -38,8 +38,6 @@ public class TestServlet extends HttpServlet {
           throws ServletException, IOException {
     
     HttpSession session = request.getSession();
-    if (session ==null) 
-      session = request.getSession(true);
     
     ArrayList<Test> tests = new ArrayList();
     
@@ -56,23 +54,17 @@ public class TestServlet extends HttpServlet {
       request.getRequestDispatcher("newjsp.jsp").forward(request, response);
     else
     {
-      response.setContentType("application/json");
+     
          
-    Test test= (Test)session.getAttribute("test");
-    if (session.getAttribute("test")==null)
-    {
-     test= new Test(1,"nn");
-      session.setAttribute("test", test);
-    }
-    test.setNum(test.getNum()+1);
-    test.setNombre("test");
-        // 1. get received JSON data from request
-        BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-        String json = "";
-        if(br != null){
-            json = br.readLine();
-        }
- 
+//    Test test= (Test)session.getAttribute("test");
+//    if (session.getAttribute("test")==null)
+//    {
+//     test= new Test(1,"nn");
+//      session.setAttribute("test", test);
+//    }
+//    test.setNum(test.getNum()+1);
+//    test.setNombre("test");
+        
         // 2. initiate jackson mapper
         ObjectMapper mapper = new ObjectMapper();
  
@@ -86,7 +78,7 @@ public class TestServlet extends HttpServlet {
         //articles.add(article);
  
         // 6. Send List<Article> as JSON to client
-        response.addHeader("json", "1");
+       
         mapper.writeValue(response.getOutputStream(), tests);
     }
     

@@ -12,10 +12,7 @@
     <title>JSP Page</title>
   </head>
   <body>
-    <%
-      out.print(request.getAttribute("tests"));
-      
-      %>
+
     
     <c:set var="t" value="${tests}" />
     <table>

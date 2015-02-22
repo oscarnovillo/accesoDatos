@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.codehaus.jackson.map.ObjectMapper;
+import quevedo.library.Test;
 
 /**
  *
@@ -32,16 +34,22 @@ public class SessionServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
+        ObjectMapper mapper = new ObjectMapper();
         HttpSession session = request.getSession();
         String s = "";
         if (session.getAttribute("num")!=null)
             s = (String)session.getAttribute("num");
             
-        s+="-h-";
         
+        Test t = null;
+        if (request.getParameter("json")!=null)
+          t = mapper.readValue(request.getParameter("json"), Test.class);
+        for (int i=0;i<t.getNum();i++)
+          s+=t.getNombre()+" ";
+        
+        s+=" -- ";
         session.setAttribute("num", s);
-        
+        request.setAttribute("json", t);
         request.setAttribute("num", s);
         request.getRequestDispatcher("sesion.jsp").forward(request, response);
         

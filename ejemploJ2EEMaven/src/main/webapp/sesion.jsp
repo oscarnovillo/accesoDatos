@@ -14,5 +14,7 @@
     <body>
         <h1>Hello World!</h1>
         <c:out value="${num}" />
+        
+        <c:out value="${json.num}" />
     </body>
 </html>

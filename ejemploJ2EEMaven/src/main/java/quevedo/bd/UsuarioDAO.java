@@ -34,7 +34,7 @@ public class UsuarioDAO {
     try {
       InitialContext ctx = new InitialContext();
       //The JDBC Data source that we just created
-      DataSource ds = (DataSource) ctx.lookup("jdbc/cl");
+      DataSource ds = (DataSource) ctx.lookup("jdbc/pepe");
       Connection connection = ds.getConnection();
       if (connection == null)
       {

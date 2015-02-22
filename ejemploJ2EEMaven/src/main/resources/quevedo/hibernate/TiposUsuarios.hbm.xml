@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22-feb-2015 13:48:14 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="quevedo.hibernate.TiposUsuarios" table="tipos_usuarios" catalog="hibernate" optimistic-lock="version">
+        <id name="idTipoUsuario" type="int">
+            <column name="ID_TIPO_USUARIO" />
+            <generator class="assigned" />
+        </id>
+        <property name="descripcion" type="string">
+            <column name="DESCRIPCION" length="45" not-null="true" />
+        </property>
+        <set name="usuarioses" table="usuarios" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TIPO_USUARIO" not-null="true" />
+            </key>
+            <one-to-many class="quevedo.hibernate.Usuarios" />
+        </set>
+    </class>
+</hibernate-mapping>

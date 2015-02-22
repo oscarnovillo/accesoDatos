@@ -5,6 +5,8 @@
  */
 package quevedo.bd;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +17,10 @@ import java.util.logging.Logger;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import quevedo.hibernate.TiposUsuarios;
+import quevedo.hibernate.Usuarios;
 
 /**
  *
@@ -53,4 +59,30 @@ public class UsuarioDAO {
     return lista;
   }
   
+  
+    public String testHibernate()
+  {
+    Session session=null;
+    String pass= null;
+    try {
+      //Get Session
+      Usuarios usuario = new Usuarios("admin",new TiposUsuarios(1,""),"admin");
+      TiposUsuarios tp = new TiposUsuarios(5,"TEST1");
+	
+      session = quevedo.hibernate.NewHibernateUtil.getSessionFactory().getCurrentSession();
+		//start transaction
+		session.beginTransaction();
+		//Save the Model object
+                Usuarios admin  = (Usuarios)session.get(Usuarios.class,"admin");
+		session.getTransaction().commit();
+                
+                pass = admin.getPassword();
+    } catch (Exception ex) {
+      Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    finally
+    {
+    }
+    return pass;
+  }
 }

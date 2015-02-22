@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22-feb-2015 13:48:14 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="quevedo.hibernate.Pedidos" table="pedidos" catalog="hibernate" optimistic-lock="version">
+        <id name="idPedido" type="java.lang.Integer">
+            <column name="ID_PEDIDO" />
+            <generator class="identity" />
+        </id>
+        <property name="codigoProducto" type="string">
+            <column name="CODIGO_PRODUCTO" length="25" not-null="true" />
+        </property>
+        <property name="usuario" type="string">
+            <column name="USUARIO" length="50" not-null="true" />
+        </property>
+        <property name="distribuidora" type="string">
+            <column name="DISTRIBUIDORA" length="50" not-null="true" />
+        </property>
+        <property name="jefaGrupo" type="string">
+            <column name="JEFA_GRUPO" length="50" not-null="true" />
+        </property>
+        <property name="precioTotal" type="long">
+            <column name="PRECIO_TOTAL" not-null="true" />
+        </property>
+        <property name="fechaCompra" type="timestamp">
+            <column name="FECHA_COMPRA" length="19" not-null="true" />
+        </property>
+        <property name="fechaEnvio" type="timestamp">
+            <column name="FECHA_ENVIO" length="19" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

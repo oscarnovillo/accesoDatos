@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22-feb-2015 13:48:14 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="quevedo.hibernate.TiposComision" table="tipos_comision" catalog="hibernate" optimistic-lock="version">
+        <id name="idTipoComision" type="int">
+            <column name="ID_TIPO_COMISION" />
+            <generator class="assigned" />
+        </id>
+        <property name="idTipoUsuario" type="int">
+            <column name="ID_TIPO_USUARIO" not-null="true" />
+        </property>
+        <property name="porcentaje" type="long">
+            <column name="PORCENTAJE" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

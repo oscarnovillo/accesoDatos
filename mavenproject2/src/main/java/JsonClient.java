@@ -1,4 +1,5 @@
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,24 +32,29 @@ public class JsonClient {
 //    Jsoup.connect("https://gestiona.madrid.org/wafd/ValidaUsuario.icm")
 //        .method(Connection.Method.GET)
 //        .execute();
-      
-      response = Jsoup.connect("http://10.1.214.100:8080/SessionServlet")
+      Test t = new Test(1,"33");
+       ObjectMapper mapper = new ObjectMapper();
+      response = Jsoup.connect("http://localhost:8080/SessionServlet")
                //.cookies(response.cookies())
-              //.data("json","true")
+              .data("json",mapper.writeValueAsString(t))
               .method(Connection.Method.POST)
               .ignoreContentType(true)
               .execute();
       
       Object m = response.cookies();
-      
+      t = new Test(10,"99");
         System.out.println(response.body());
-              response = Jsoup.connect("http://10.1.214.100:8080/SessionServlet")
+              response = Jsoup.connect("http://localhost:8080/SessionServlet")
               .cookies((Map)m)
-              //.data("json","true")
+              .data("json",mapper.writeValueAsString(t))
               .method(Connection.Method.POST)
               .ignoreContentType(true)
               .execute();
-      
+              
+     
+        
+      System.out.println(mapper.writeValueAsString(t));
+    
         System.out.println(response.body());
 //      String json = response.body();
 //      // 2. initiate jackson mapper

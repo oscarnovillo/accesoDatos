@@ -43,10 +43,11 @@ public class SessionServlet extends HttpServlet {
         
         Test t = null;
         if (request.getParameter("json")!=null)
+        {  
           t = mapper.readValue(request.getParameter("json"), Test.class);
         for (int i=0;i<t.getNum();i++)
           s+=t.getNombre()+" ";
-        
+        }
         s+=" -- ";
         session.setAttribute("num", s);
         request.setAttribute("json", t);

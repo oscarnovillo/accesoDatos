@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jersey;
+package org.doublecloud.rest.demo;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -13,18 +13,14 @@ import javax.ws.rs.core.MediaType;
  *
  * @author profesor
  */
+@Path("/hello")
 public class FirstJersey {
  
-
-//Sets the path to base URL + /hello
-@Path("/hello")
-public class Hello {
-
   // This method is called if TEXT_PLAIN is request
   @GET
   @Produces(MediaType.TEXT_PLAIN)
   public String sayPlainTextHello() {
-    return "Hello Jersey";
+    return "Hello  Jersey";
   }
 
   // This method is called if XML is request
@@ -38,10 +34,10 @@ public class Hello {
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String sayHtmlHello() {
-    return "<html> " + "<title>" + "Hello Jersey" + "</title>"
-        + "<body><h1>" + "Hello Jersey" + "</body></h1>" + "</html> ";
+    return "<html> " + "<title>" + "Hello ddfdfJersey" + "</title>"
+        + "<body><h1>" + "Hello cvbcvbcbvJersey" + "</body></h1>" + "</html> ";
   }
 
-} 
+
     
 }

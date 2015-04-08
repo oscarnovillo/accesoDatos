@@ -31,10 +31,6 @@ public class FormUpload {
 
         multipartEntity.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
-
-        FileBody fileBody = new FileBody(file); //image should be a String
-
-        
         multipartEntity.addTextBody("destination", "../");
         multipartEntity.addBinaryBody("file", file);
 
